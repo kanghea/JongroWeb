@@ -6,9 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { BrowserView, MobileView } from 'react-device-detect';
 
-import * as ReactDOMClient from 'react-dom/client';
-import * as ReactDOMServer from 'react-dom/server';
-
 import Student from './desktop/student';
 import Teacher from './desktop/teacher';
 import Parents from './desktop/Parents';
@@ -26,7 +23,6 @@ root.render(
         <Route path="/teacher" element={<Teacher/>} />
         <Route path="/parents" element={<Parents/>} />
         <Route path="/m" element={<MainM/>} />
-
       </Routes>
     </BrowserView>
     <MobileView>
