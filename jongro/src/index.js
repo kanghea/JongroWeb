@@ -10,6 +10,7 @@ import Student from './desktop/student';
 import Teacher from './desktop/teacher';
 import Parents from './desktop/Parents';
 import MainM from './mobile/mainm';
+import R_Login from './desktop/studentCom/R_Login';
 
 
 
@@ -20,6 +21,7 @@ root.render(
       <Routes>
         <Route path="/" element={<Main />} />
         <Route path="/student" element={<Student/>} />
+        <Route path="/stu" element={<R_Login/>} />
         <Route path="/teacher" element={<Teacher/>} />
         <Route path="/parents" element={<Parents/>} />
         <Route path="/m" element={<MainM/>} />
