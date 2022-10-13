@@ -1,9 +1,17 @@
 import './login.css';
 import {useState} from 'react';
+import Axios from 'axios';
 
 function Login() {
-    const [id, setId] = useState(false);
-    const [pw, setPw] = useState(false);
+    const [inputID, setInputId] = useState('');
+    const [inputPW, setInputPw] = useState('');
+    
+    const submitLogin = ()=>{
+        Axios.post('http://localhost:3001/api/login',{
+          inputID:inputID,
+          inputPW:inputPW
+        }).then(()=>{alert('성공적으로 입력했습니다.')});
+      };
     return(
         <div>
             <head>
@@ -18,16 +26,16 @@ function Login() {
                     <from action="">
                         <div class="int-area">
                             <input type="text" name="id" id="id"
-                                autoComplete='off' required onClick={() => {setId(true);}} />
-                            <label for='id'>Username</label>
+                                autoComplete='off' required onChange={(e)=>{setInputId(e.target.value)}}></input>
+                            <label for='id'>아이디를 입력해주세요!</label>
                         </div>
                         <div class="int-area">
                             <input type="password" name="pw" id="pw"
-                                autoComplete='off' required onClick={() => {setPw(true);}}/>
-                            <label for='pw'>password</label>
+                                autoComplete='off' required onChange={(e)=>{setInputPw(e.target.value)}}/>
+                            <label for='pw'>비밀번호를 입력해주세요!</label>
                         </div>
                         <div class="btn-area">
-                            <button id='btn' type='submit' onClick={() => {if(id,pw == true){alert('성공')} else{alert('실패')}}}>로그인</button>
+                            <button onClick={submitLogin}>누르시오</button>
                         </div>
                     </from>
                     <div class="caption">
