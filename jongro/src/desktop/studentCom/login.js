@@ -35,7 +35,7 @@ function Login() {
                             <label for='pw'>비밀번호를 입력해주세요!</label>
                         </div>
                         <div class="btn-area">
-                            <button onClick={submitLogin}>누르시오</button>
+                            <button onClick={submitLogin}>로그인</button>
                         </div>
                     </from>
                     <div class="caption">

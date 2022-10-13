@@ -33,7 +33,7 @@ app.post('/api/insert',(req,res)=>{
 app.post('/api/login',(req,res)=>{
     const inputId = req.body.inputID;
     const inputPw = req.body.inputPW;
-    const sqlInsert = `INSERT INTO movie_review (movie_name, movie_revie) VALUES ('${inputId}', '${inputPw}');`;
+    const sqlInsert = `INSERT INTO users (name,password) VALUES ('${inputId}', '${inputPw}');`;
     db.query(sqlInsert,(err,result)=>{console.log(result);});
 });
 app.listen(PORT, () => {
