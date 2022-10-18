@@ -36,16 +36,6 @@ function Main() {
       <Title />
       <Act />
       <Last />
-      <div className="flex flex-col items-center justify-center">
-        <input type={"text"} name="movieName" className="bg-black w-80 h-20" onChange={(e)=>{
-          setMoviename(e.target.value)
-        }}></input>
-        <input type={"text"} name="review" className="bg-yellow-300 w-80 h-20" onChange={(e)=>{
-          setReview(e.target.value)}}></input>
-        <button onClick={submitReview} className="text-white border-2">로그인</button>
-      </div>
-
-
     </div>
   );
 }

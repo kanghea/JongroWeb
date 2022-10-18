@@ -1,18 +1,30 @@
 import './login.css';
-import {useState} from 'react';
+import { useState } from 'react';
 import Axios from 'axios';
 
 function Login() {
     const [inputID, setInputId] = useState('');
     const [inputPW, setInputPw] = useState('');
-    
-    const submitLogin = ()=>{
-        Axios.post('http://localhost:3001/api/login',{
-          inputID:inputID,
-          inputPW:inputPW
-        }).then(()=>{alert('성공적으로 입력했습니다.')});
-      };
-    return(
+    const submitLogin = () => {
+        Axios.post('http://localhost:3001/api/login', {
+            inputID: inputID,
+            inputPW: inputPW
+        }).then(() => { alert('성공적으로 입력했습니다.') });
+        Axios.get('http://localhost:3001/api/login')
+            .then(function (response) {
+                // 성공 핸들링
+                console.log(response);
+            })
+            .catch(function (error) {
+                // 에러 핸들링
+                console.log(error);
+            })
+            .then(function () {
+                console.log("안녕")
+            });
+
+    };
+    return (
         <div>
             <head>
                 <meta charSet="UTF-8"></meta>
@@ -26,12 +38,12 @@ function Login() {
                     <from action="">
                         <div class="int-area">
                             <input type="text" name="id" id="id"
-                                autoComplete='off' required onChange={(e)=>{setInputId(e.target.value)}}></input>
+                                autoComplete='off' required onChange={(e) => { setInputId(e.target.value) }}></input>
                             <label for='id'>아이디를 입력해주세요!</label>
                         </div>
                         <div class="int-area">
                             <input type="password" name="pw" id="pw"
-                                autoComplete='off' required onChange={(e)=>{setInputPw(e.target.value)}}/>
+                                autoComplete='off' required onChange={(e) => { setInputPw(e.target.value) }} />
                             <label for='pw'>비밀번호를 입력해주세요!</label>
                         </div>
                         <div class="btn-area">
