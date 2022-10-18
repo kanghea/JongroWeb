@@ -60,7 +60,7 @@ app.post('/api/login', (req, res) => {
             } else{
                 console.log(result[0])
                 const jwtSecretKey = process.env.JWT_SECRET_KEY;
-                var token = jwt.sign(result[0].toObject(), jwtSecretKey);
+                var token = jwt.sign(result, jwtSecretKey);
             }
         }
     })
