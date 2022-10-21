@@ -4,6 +4,8 @@ const mysql = require('mysql');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 
+const crypto = require("crypto");
+
 dotenv.config();
 const app = express();
 const db = mysql.createPool({
@@ -45,9 +47,10 @@ app.post('/api/insert', (req, res) => {
 
 app.post('/api/login', (req, res) => {
     const inputId = req.body.inputID;
-    const inputPw = req.body.inputPW;
-    
-    const sqlInsert = `SELECT login_id,password,Name,grade,date,rate from student WHERE login_id= '${inputId}' AND password = '${inputPw}'`;
+    var inputPw = req.body.inputPW;
+    var inputPw = crypto.createHash('sha512').update(`${inputPw}`).digest('base64');
+    console.log(inputPw)
+    const sqlInsert = `SELECT ID,login_id,password,Name from student WHERE login_id= '${inputId}' AND password = '${inputPw}'`;
 
     database.query(sqlInsert, (err, result) => {
         if (err) {
@@ -55,17 +58,32 @@ app.post('/api/login', (req, res) => {
         } else if (result) {
             if(result[0] == null){
                 console.log("아니다");
-                let mes = 'no';
-                res.send(mes);
-            } else{
-                console.log(result[0])
+                res.send(200,"error");
+            } else{                
+                ID = result[0].ID
+                login_id = result[0].login_id
+                password = result[0].password
+                Name = result[0].Name
+                
+                var pass = crypto.createHash('sha512').update(`${password}`).digest('base64');
+                
+                let data = {
+                    password:pass
+                }
                 const jwtSecretKey = process.env.JWT_SECRET_KEY;
-                var token = jwt.sign(result, jwtSecretKey);
+                
+                var token = jwt.sign(data, jwtSecretKey,{expiresIn: '5days'});
+                
+                res.send(200,token) 
+                console.log(pass)
+                console.log(token)
+                console.log(`<br/>`)
+                
             }
         }
     })
 });
-app.get("/api/user/veri", (req, res) => {
+app.get("/api/login/acc", (req, res) => {
     // Tokens are generally passed in the header of the request
     // Due to security reasons.
   
@@ -73,7 +91,7 @@ app.get("/api/user/veri", (req, res) => {
     let jwtSecretKey = process.env.JWT_SECRET_KEY;
   
     try {
-        const token = req.header(tokenHeaderKey);
+        var token = req.header(tokenHeaderKey);
   
         const verified = jwt.verify(token, jwtSecretKey);
         if(verified){

@@ -1,27 +1,40 @@
 import './login.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Axios from 'axios';
 
 function Login() {
     const [inputID, setInputId] = useState('');
     const [inputPW, setInputPw] = useState('');
+    const [accesstoken, setAccessToken] = useState('');
+
+    const login_id = localStorage.getItem('login_id');
+    const Accesstoken = localStorage.getItem('access-token');
+    
+
     const submitLogin = () => {
         Axios.post('http://localhost:3001/api/login', {
             inputID: inputID,
             inputPW: inputPW
-        }).then(() => { alert('성공적으로 입력했습니다.') });
-        Axios.get('http://localhost:3001/api/login')
-            .then(function (response) {
-                // 성공 핸들링
-                console.log(response);
-            })
-            .catch(function (error) {
-                // 에러 핸들링
-                console.log(error);
-            })
-            .then(function () {
-                console.log("안녕")
-            });
+        }).then((res) => {
+            if(res.data == "error"){
+                alert("옳지 않아요!!");
+            }else{
+                alert("옳게 입력하셨네영!");
+                console.log(res.data);
+                setAccessToken(res.data);
+                localStorage.setItem(
+                    'login_id',inputID,
+                    'access-token',accesstoken
+                );
+
+                window.location.assign('/student/Mypage')
+            }
+            console.log(localStorage.getItem('login_id'));
+            console.log(localStorage.getItem('access-token'));
+            
+            //window.localStorage.clear(); localstrage 값 전체 삭제.
+        }).catch(()=>{alert('어라.. 어째서 오류가..?')});
+        
 
     };
     return (
