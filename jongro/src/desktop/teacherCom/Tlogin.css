@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap');
+
+* {margin:0; padding:0; box-sizing: border-box;}
+.body1 {
+    z-index: 100;
+    font-family: 'IBM Plex Sans KR', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background:url("loginbg2.png") no-repeat center;
+}
+
+.login-from {position:relative; z-index: 2;}
+.int-area {width: 400px; position: relative;}
+.int-area:first-child {margin-top: 0;}
+.int-area input {
+    width: 100%;
+    padding: 20px 10px 10px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid;
+    font-size: 18px;
+    color: #fff;
+    outline: none;
+}
+.int-area label {
+    position: absolute;
+    font-size: 18px;
+    left: 10px;
+    top: 15px;
+    color: #999;
+    transition: all .5s ease;
+}
+.int-area label.warnign {
+    color: red !important;
+    animation: warning .3s ease;
+    animation-iteration-count: 3;
+}
+.int-area input:focus + label,
+.int-area input:valid + label {
+    top: -2px;
+    font-size: 13px;
+    color: #166cea;
+    
+}
+.btn-area {
+    margin-top: 30px;
+}
+.btn-area button {
+    width: 100%;
+    background-color: #166cea;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 25px;
+}
+.caption {
+    margin-top: 20px;
+    text-align: center;
+}
+.caption a {
+    font-size: 15px;
+    color: #999;
+    text-decoration: none;
+
+}

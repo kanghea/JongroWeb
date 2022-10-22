@@ -1,18 +1,18 @@
-import './login.css';
+import './Tlogin.css';
 import { useEffect, useState } from 'react';
 import Axios from 'axios';
 
-function Login() {
+function TeacherLogin() {
     const [inputID, setInputId] = useState('');
     const [inputPW, setInputPw] = useState('');
     const [accesstoken, setAccessToken] = useState('');
-
-    const login_id = localStorage.getItem('login_id');
-    const Accesstoken = localStorage.getItem('access-token');
     
-
+    const submitwhere = () => {
+        alert("관리자에게 문의해주세요!")
+    }
+    
     const submitLogin = () => {
-        Axios.post('http://localhost:3001/api/login', {
+        Axios.post('http://localhost:3001/api/login/teacher', {
             inputID: inputID,
             inputPW: inputPW
         }).then((res) => {
@@ -64,7 +64,7 @@ function Login() {
                         </div>
                     </from>
                     <div class="caption">
-                        <a href='/' className='hover:text-slate-500'>비밀번호를 잊어버리셨나요?</a>
+                        <button className='hover:text-slate-500 text-gray-400' onClick={submitwhere}>비밀번호를 잊어버리셨나요?</button>
                     </div>
                 </section>
             </div>
@@ -72,4 +72,4 @@ function Login() {
     )
 
 }
-export default Login;
+export default TeacherLogin;

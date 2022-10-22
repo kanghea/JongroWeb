@@ -7,7 +7,7 @@ import {BrowserRouter as Router, Route, Routes,Link} from 'react-router-dom';
 import { BrowserView, MobileView } from 'react-device-detect';
 
 import Student from './desktop/student';
-import Teacher from './desktop/teacher';
+import Teacher from './desktop/Teacher';
 import Parents from './desktop/Parents';
 import MainM from './mobile/mainm';
 import R_Login from './desktop/studentCom/R_Login';
