@@ -9,9 +9,10 @@ import Axios from 'axios';
             token: ACcesstoken
         }).then((res) => {
             if(res.data == 'success'){
+                alert("이미 로그인 하셨어요!")
                 window.location.href='/student/Mypage'
             }
-        }).catch(()=>{alert('아무일도.. 없었다.')});
+        });
 })();
 function StudentLogin() {
     const [inputID, setInputId] = useState('');
@@ -28,10 +29,9 @@ function StudentLogin() {
             }else{
                 alert("옳게 입력하셨네영!");
                 setAccessToken(res.data);
-                console.log(accesstoken);
                 localStorage.setItem('login_id' , `${inputID}`);
                 localStorage.setItem('access-token' , `${accesstoken}`);
-                window.location.href='/student/Mypage';
+                window.location.href = '/student/Mypage';
             }
             
         }).catch(()=>{alert('어라.. 어째서 오류가..?')});

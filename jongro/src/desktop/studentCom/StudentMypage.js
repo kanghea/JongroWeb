@@ -8,11 +8,11 @@ import Axios from 'axios';
             token: ACcesstoken
         }).then((res) => {
             if(res.data == 'error'){
-                window.location.href='/student'
+                window.location.href = '/student';
             } else{
                 console.log("로그인 승인")
             }
-        }).catch(()=>{alert('아무일도.. 없었다.')});
+        });
 })();
 
 function StudentMypage(){    

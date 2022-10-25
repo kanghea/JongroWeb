@@ -157,11 +157,11 @@ app.post("/api/teacher/acc", (req, res) => {
             return res.send("Success");
         }else{
             // Access Denied
-            return res.status(401).send("error");
+            return res.send("error");
         }
     } catch (error) {
         // Access Denied
-        return res.status(401).send("error");
+        return res.send("error");
     }
 });
 app.listen(PORT, () => {
