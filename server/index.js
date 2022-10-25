@@ -69,7 +69,7 @@ app.post('/api/login/student', (req, res) => {
                 let data = {
                     password:pass
                 }
-                const jwtSecretKey = process.env.JWT_SECRET_KEY;
+                const jwtSecretKey = process.env.STUJWT_SECRET_KEY;
                 
                 var token = jwt.sign(data, jwtSecretKey,{expiresIn: '5days'});
                 
@@ -107,7 +107,7 @@ app.post('/api/login/teacher', (req, res) => {
                 let data = {
                     password:pass
                 }
-                const jwtSecretKey = process.env.JWT_SECRET_KEY;
+                const jwtSecretKey = process.env.TEAJWT_SECRET_KEY;
                 
                 var token = jwt.sign(data, jwtSecretKey,{expiresIn: '5days'});
                 
@@ -120,26 +120,48 @@ app.post('/api/login/teacher', (req, res) => {
         }
     })
 });
-app.get("/api/login/acc", (req, res) => {
+app.post("/api/student/acc", (req, res) => {
     // Tokens are generally passed in the header of the request
-    // Due to security reasons.
-  
-    let tokenHeaderKey = process.env.TOKEN_HEADER_KEY;
-    let jwtSecretKey = process.env.JWT_SECRET_KEY;
-  
+    // Due to security reasons. 
+    let jwtSecretKey = process.env.STUJWT_SECRET_KEY;
+    const inputId = req.body.inputID;
+    var token = req.body.token;
+    console.log(token)
+    console.log(inputId)
     try {
-        var token = req.header(tokenHeaderKey);
   
         const verified = jwt.verify(token, jwtSecretKey);
         if(verified){
-            return res.send("Successfully Verified");
+            return res.send("Success");
         }else{
             // Access Denied
-            return res.status(401).send(error);
+            return res.status(401).send("error");
         }
     } catch (error) {
         // Access Denied
-        return res.status(401).send(error);
+        return res.status(401).send("error");
+    }
+});
+app.post("/api/teacher/acc", (req, res) => {
+    // Tokens are generally passed in the header of the request
+    // Due to security reasons. 
+    let jwtSecretKey = process.env.TEAJWT_SECRET_KEY;
+    const inputId = req.body.inputID;
+    var token = req.body.token;
+    console.log(token)
+    console.log(inputId)
+    try {
+  
+        const verified = jwt.verify(token, jwtSecretKey);
+        if(verified){
+            return res.send("Success");
+        }else{
+            // Access Denied
+            return res.status(401).send("error");
+        }
+    } catch (error) {
+        // Access Denied
+        return res.status(401).send("error");
     }
 });
 app.listen(PORT, () => {

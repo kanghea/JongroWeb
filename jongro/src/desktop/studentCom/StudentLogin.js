@@ -1,15 +1,22 @@
 import './login.css';
 import { useEffect, useState } from 'react';
 import Axios from 'axios';
-
+(function () {
+    const login_id = (localStorage.getItem('login_id'));
+    const ACcesstoken =(localStorage.getItem('access-token'));
+    Axios.post('http://localhost:3001/api/student/acc', {
+            login_id: login_id,
+            token: ACcesstoken
+        }).then((res) => {
+            if(res.data == 'success'){
+                window.location.href='/student/Mypage'
+            }
+        }).catch(()=>{alert('아무일도.. 없었다.')});
+})();
 function StudentLogin() {
     const [inputID, setInputId] = useState('');
     const [inputPW, setInputPw] = useState('');
     const [accesstoken, setAccessToken] = useState('');
-
-    const login_id = localStorage.getItem('login_id');
-    const Accesstoken = localStorage.getItem('access-token');
-    
 
     const submitLogin = () => {
         Axios.post('http://localhost:3001/api/login/student', {
@@ -20,19 +27,13 @@ function StudentLogin() {
                 alert("옳지 않아요!!");
             }else{
                 alert("옳게 입력하셨네영!");
-                console.log(res.data);
                 setAccessToken(res.data);
-                localStorage.setItem(
-                    'login_id',inputID,
-                    'access-token',accesstoken
-                );
-
-                window.location.assign('/student/Mypage')
+                console.log(accesstoken);
+                localStorage.setItem('login_id' , `${inputID}`);
+                localStorage.setItem('access-token' , `${accesstoken}`);
+                window.location.href='/student/Mypage';
             }
-            console.log(localStorage.getItem('login_id'));
-            console.log(localStorage.getItem('access-token'));
             
-            //window.localStorage.clear(); localstrage 값 전체 삭제.
         }).catch(()=>{alert('어라.. 어째서 오류가..?')});
         
 
@@ -48,9 +49,9 @@ function StudentLogin() {
             </head>
             <div class="body1">
                 <section class="login-form">
-                    <div className='flex justify-center'>
+                    <a className='flex justify-center' href='/'>
                         <img alt='logoimg' src="./img/jongrologo.png" className='w-32 items-center'></img>
-                    </div>
+                    </a>
                     <from action="">
                         <div class="int-area">
                             <input type="text" name="id" id="id"

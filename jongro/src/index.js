@@ -12,8 +12,8 @@ import Parents from './desktop/Parents';
 import MainM from './mobile/mainm';
 import R_Login from './desktop/studentCom/R_Login';
 
-import isLogin from './desktop/lib/Islogin';
-import Mypage from './desktop/studentCom/Mypage';
+import StudentMypage from './desktop/studentCom/StudentMypage';
+import Loading from './desktop/loading';
 
 
 
@@ -22,9 +22,10 @@ root.render(
   <Router>
     <BrowserView>
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path='/' element={<Loading/>} />
+        <Route path="/main" element={<Main />} />
         <Route path="/student" element={<Student/>} />
-        <Route path="/student/Mypage" element={<Mypage/>} />
+        <Route path="/student/Mypage" element={<StudentMypage/>} />
         
         <Route path="/stu" element={<R_Login/>} />
         <Route path="/teacher" element={<Teacher/>} />
@@ -40,9 +41,4 @@ root.render(
   </Router>
 );
 
-const Navigation = () => (
-  <nav>
-    <Link to="/student">학생</Link>
-  </nav>
-);
 reportWebVitals();
