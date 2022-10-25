@@ -8,12 +8,14 @@ import { BrowserView, MobileView } from 'react-device-detect';
 
 import Student from './desktop/student';
 import Teacher from './desktop/Teacher';
+import TeacherMypage from './desktop/teacherCom/TeacherMypage';
 import Parents from './desktop/Parents';
 import MainM from './mobile/mainm';
 import R_Login from './desktop/studentCom/R_Login';
 
 import StudentMypage from './desktop/studentCom/StudentMypage';
 import Loading from './desktop/loading';
+import Err from './desktop/Err';
 
 
 
@@ -29,10 +31,12 @@ root.render(
         
         <Route path="/stu" element={<R_Login/>} />
         <Route path="/teacher" element={<Teacher/>} />
+        <Route path="/teacher/Mypage" element={<TeacherMypage/>} />
+        
         <Route path="/parents" element={<Parents/>} />
         <Route path="/m" element={<MainM/>} />
         <Route path="/student/Mypage" element={<MainM/>} />
-        <Route path="*" element={<p>어라라.. 없는 주소인데</p>} />
+        <Route path="*" element={<Err/>} />
       </Routes>
     </BrowserView>
     <MobileView>

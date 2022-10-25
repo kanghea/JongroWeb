@@ -1,20 +1,21 @@
 import './login.css';
 import { useEffect, useState } from 'react';
 import Axios from 'axios';
-(function () {
-    const login_id = (localStorage.getItem('login_id'));
-    const ACcesstoken =(localStorage.getItem('access-token'));
-    Axios.post('http://localhost:3001/api/student/acc', {
-            login_id: login_id,
-            token: ACcesstoken
-        }).then((res) => {
-            if(res.data == 'success'){
-                alert("이미 로그인 하셨어요!")
-                window.location.href='/student/Mypage'
-            }
-        });
-})();
 function StudentLogin() {
+    (function () {
+        const login_id = (localStorage.getItem('login_id'));
+        const ACcesstoken =(localStorage.getItem('access-token'));
+        Axios.post('http://localhost:3001/api/student/acc', {
+                login_id: login_id,
+                token: ACcesstoken
+            }).then((res) => {
+                if(res.data == 'success'){
+                    alert("이미 로그인 하셨어요!")
+                    window.location.href='/student/Mypage'
+                }
+            });
+    })();
+    
     const [inputID, setInputId] = useState('');
     const [inputPW, setInputPw] = useState('');
     const [accesstoken, setAccessToken] = useState('');
@@ -30,7 +31,7 @@ function StudentLogin() {
                 alert("옳게 입력하셨네영!");
                 setAccessToken(res.data);
                 localStorage.setItem('login_id' , `${inputID}`);
-                localStorage.setItem('access-token' , `${accesstoken}`);
+                localStorage.setItem('access-token' , `${res.data}`);
                 window.location.href = '/student/Mypage';
             }
             

@@ -112,17 +112,14 @@ app.post('/api/login/teacher', (req, res) => {
                 var token = jwt.sign(data, jwtSecretKey,{expiresIn: '5days'});
                 
                 res.send(200,token) 
-                console.log(pass)
                 console.log(token)
-                console.log(`<br/>`)
                 
             }
         }
     })
 });
 app.post("/api/student/acc", (req, res) => {
-    // Tokens are generally passed in the header of the request
-    // Due to security reasons. 
+
     let jwtSecretKey = process.env.STUJWT_SECRET_KEY;
     const inputId = req.body.inputID;
     var token = req.body.token;
@@ -132,14 +129,14 @@ app.post("/api/student/acc", (req, res) => {
   
         const verified = jwt.verify(token, jwtSecretKey);
         if(verified){
-            return res.send("Success");
+            return res.send("success");
         }else{
             // Access Denied
-            return res.status(401).send("error");
+            return res.send("error");
         }
     } catch (error) {
         // Access Denied
-        return res.status(401).send("error");
+        return res.send("error");
     }
 });
 app.post("/api/teacher/acc", (req, res) => {

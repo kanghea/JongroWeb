@@ -3,14 +3,24 @@ import { useEffect, useState } from 'react';
 import Axios from 'axios';
 
 function TeacherLogin() {
+    (function () {
+        const login_id = (localStorage.getItem('login_id'));
+        const ACcesstoken =(localStorage.getItem('access-token'));
+        Axios.post('http://localhost:3001/api/teacher/acc', {
+                login_id: login_id,
+                token: ACcesstoken
+            }).then((res) => {
+                if(res.data == 'success'){
+                    alert("이미 로그인 하셨어요!")
+                    window.location.href='/teacher/Mypage'
+                }
+            });
+    })();
+    
     const [inputID, setInputId] = useState('');
     const [inputPW, setInputPw] = useState('');
     const [accesstoken, setAccessToken] = useState('');
-    
-    const submitwhere = () => {
-        alert("관리자에게 문의해주세요!")
-    }
-    
+
     const submitLogin = () => {
         Axios.post('http://localhost:3001/api/login/teacher', {
             inputID: inputID,
@@ -20,23 +30,19 @@ function TeacherLogin() {
                 alert("옳지 않아요!!");
             }else{
                 alert("옳게 입력하셨네영!");
-                console.log(res.data);
                 setAccessToken(res.data);
-                localStorage.setItem(
-                    'login_id',inputID,
-                    'access-token',accesstoken
-                );
-
-                window.location.assign('/student/Mypage')
+                localStorage.setItem('login_id' , `${inputID}`);
+                localStorage.setItem('access-token' , `${res.data}`);
+                window.location.href = '/teacher/Mypage';
             }
-            console.log(localStorage.getItem('login_id'));
-            console.log(localStorage.getItem('access-token'));
             
-            //window.localStorage.clear(); localstrage 값 전체 삭제.
         }).catch(()=>{alert('어라.. 어째서 오류가..?')});
         
 
     };
+    const submitwhere = () => {
+        alert("관리자에게 문의해주세요!")
+    }
     return (
         <div>
             <head>
