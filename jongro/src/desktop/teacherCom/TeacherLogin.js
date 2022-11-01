@@ -10,7 +10,7 @@ function TeacherLogin() {
                 login_id: login_id,
                 token: ACcesstoken
             }).then((res) => {
-                if(res.data == 'success'){
+                if(res.data == 'Success'){
                     alert("이미 로그인 하셨어요!")
                     window.location.href='/teacher/Mypage'
                 }

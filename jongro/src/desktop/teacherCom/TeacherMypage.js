@@ -1,7 +1,9 @@
 import {useState} from 'react';
 import Axios from 'axios';
+import Teacherheader from './Teacherheader';
+import Teachermaincontent from './Teachercontent';
 function StudentMypage(){    
-    
+    const login_id = (localStorage.getItem('login_id'));
     (function() {
         const login_id = (localStorage.getItem('login_id'));
         const ACcesstoken =(localStorage.getItem('access-token'));
@@ -17,8 +19,9 @@ function StudentMypage(){
                 }
             });
     })();
-    return(<div>
-        안녕
+    return(<div className='flex'>
+            <Teacherheader/>
+            <Teachermaincontent/>
         </div>)
 }
 

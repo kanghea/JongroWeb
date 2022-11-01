@@ -1,7 +1,8 @@
 function Err(){
     return(
-        <div>
-            없는 페이지인데..
+        <div className="flex flex-col items-center justify-center">
+            <img src="../img/404.png"/>
+            <div>없는페이지에요!</div>
         </div>
     )
 }
