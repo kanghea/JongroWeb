@@ -21,7 +21,9 @@ function StudentMypage(){
     })();
     return(<div className='flex'>
             <Teacherheader/>
-            <Teachermaincontent/>
+            <div className='ml-[280px] flex justify-center'>
+                안녕
+            </div>
         </div>)
 }
 

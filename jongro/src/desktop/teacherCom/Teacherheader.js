@@ -5,7 +5,7 @@ function Teacherheader(){
         window.location.href = '/main'
     }
     return(
-        <div className="flex flex-col fixed w-[280px] shadow-md h-full">
+        <div className="flex flex-col fixed w-[280px] shadow-lg h-full">
             <div className="p-3 h-24 box-border flex justify-center">
                 <a href="/main">
                     <img src="../img/jongrologo2.png" className="h-full"/>
