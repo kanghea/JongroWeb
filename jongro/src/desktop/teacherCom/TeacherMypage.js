@@ -21,8 +21,12 @@ function StudentMypage(){
     })();
     return(<div className='flex'>
             <Teacherheader/>
-            <div className='ml-[280px] flex justify-center'>
-                안녕
+            <div className='ml-[280px] flex justify-center w-full'>
+                <div className='lg:p-[30px] flex flex-col'>
+                    <div>개인정보</div>
+                    <img src='../img/banner1.png' className='rounded-md mt-3 shadow-md'/>
+                </div>
+                
             </div>
         </div>)
 }
