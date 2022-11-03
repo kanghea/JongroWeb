@@ -24,7 +24,7 @@ function Teacherheader(){
                     <div className="w-1/2 flex justify-center align-middle items-center border-b-2 border-r-2">코멘트</div><div className="w-1/2 flex justify-center align-middle items-center border-b-2">숙제</div>
                 </div>
             </div>
-            <ul className="overflow-x-hidden overflow-y-scroll m-0 border-t-[1px] text-left pl-5 flex flex-col justify-between h-auto w-full">
+            <ul className="overflow-x-hidden overflow-y-scroll m-0 border-t-[1px] text-left pl-5 h-full w-full">
                 <li className="h-40 items-center block">
                     1
                 </li>
@@ -37,16 +37,6 @@ function Teacherheader(){
                 <li className="h-40 items-center block">
                     1
                 </li>
-                <li className="h-40 items-center block">
-                    1
-                </li>
-                <li className="h-40 items-center block">
-                    1
-                </li>
-                <li className="h-40 items-center block">
-                    1
-                </li>
-                
             </ul>
         </div>
     )
