@@ -118,6 +118,36 @@ app.post('/api/login/teacher', (req, res) => {
         }
     })
 });
+app.post('/api/teacher/student', (req, res) => {
+    const Name = req.body.Name;
+    const Grade = req.body.Grade;
+    const Rate = req.body.Rate;
+    const Teacher = req.body.Teacher;
+    const Birthday = req.body.Birthday;
+    const Week = req.body.Week;
+    const Time = req.body.Time;
+    const Class = req.body.Class
+    
+    var inputPw = crypto.createHash('sha512').update(`${Birthday}`).digest('base64');
+    const sqlInsert = `INSERT INTO jongro.student (Name, grade, rate, login_id, password, teacher,class) VALUES ('${Name}', '${Grade}', '${Rate}', '${Name}', '${inputPw}', '${Teacher}','${Class}')`;
+    const sqlin = `INSERT INTO jongro.homework (name) VALUES ('${Name}');`
+
+    database.query(sqlInsert, (err, result) => {
+        if (err) {
+            console.log(err)
+            res.send("err");
+        } else if (result) {
+            res.send("success");
+        }
+    })
+    database.query(sqlin, (err,result)=>{
+        if(err){
+            console.log(err);
+        } else if(result){
+            console.log(result);
+        }
+    })
+});
 app.post("/api/student/acc", (req, res) => {
 
     let jwtSecretKey = process.env.STUJWT_SECRET_KEY;

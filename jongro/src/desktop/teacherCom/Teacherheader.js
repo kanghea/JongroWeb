@@ -1,7 +1,7 @@
 function Teacherheader(){
     const login_id = (localStorage.getItem('login_id'));
     const submitlogout = () => {
-        window.localStorage.clear();
+        window.localStorage.removeItem('access-token');
         window.location.href = '/main'
     }
     return(
@@ -18,10 +18,10 @@ function Teacherheader(){
             </div>
             <div className="mx-3 box-border h-24 align-middle items-center border-t-0">
                 <div className="w-full flex flex-row justify-between h-10 border-x-2">
-                    <div className="w-1/2 flex justify-center align-middle items-center border-b-2 border-r-2">학생관리</div><div className="w-1/2 flex justify-center align-middle items-center border-b-2">성적관리</div>
+                    <a className="w-1/2 flex justify-center align-middle items-center border-b-2 border-r-2" href="/teacher/student">학생추가</a><div className="w-1/2 flex justify-center align-middle items-center border-b-2">성적관리</div>
                 </div>
                 <div className="w-full flex flex-row justify-between h-10 border-x-2">
-                    <div className="w-1/2 flex justify-center align-middle items-center border-b-2 border-r-2">코멘트</div><div className="w-1/2 flex justify-center align-middle items-center border-b-2">숙제</div>
+                    <div className="w-1/2 flex justify-center align-middle items-center border-b-2 border-r-2">내반관리</div><div className="w-1/2 flex justify-center align-middle items-center border-b-2">숙제</div>
                 </div>
             </div>
             <ul className="overflow-x-hidden overflow-y-scroll m-0 border-t-[1px] text-left pl-5 h-full w-full">

@@ -15,6 +15,9 @@ function TeacherLogin() {
                     window.location.href='/teacher/Mypage'
                 }
             });
+        if(login_id != null){
+            window.location.href='/teacher/acc'
+        }
     })();
     
     const [inputID, setInputId] = useState('');
