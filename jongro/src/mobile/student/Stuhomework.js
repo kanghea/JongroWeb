@@ -1,7 +1,23 @@
+import { useState } from "react";
 import Header from "./Header";
+import Axios from "axios";
 function Stuhomework() {
+    const [wh, Setwh] = useState('');
+    const [what, Setwhat] = useState('');
 
-
+    const handle = (e) => {
+        console.log(e.target.value);
+        Setwh(e.target.value);
+    }
+    const submit = (e) => {
+        Axios.post('http://localhost:3001/api/student/homework', {
+            wh: wh,
+            what: what
+        }).then((res) => {
+            alert("숙제체크가 완료되었습니다.")
+            
+        }).catch(()=>{alert('어라.. 어째서 오류가..?')});
+    }
     return (
         <div>
             <Header />
@@ -14,29 +30,32 @@ function Stuhomework() {
                 </div>
                 <div id='설문 문항 1' className="flex flex-col px-1 py-3 mt-3 border-b-2">
                     <div className="w-full bg-gray-400/25 border-b-gray-900">
-                        1. 숙제를 다 완료 하였나요?
+                        1. 숙제를 했나요?
                     </div>
                     <div>
-                        <input type="radio" name="list" value="1" className="left-10"></input>
+                        <input type="radio" name="list" value="1" className="left-10" onChange={handle}></input>
                         예
                     </div>
                     <div>
-                        <input type="radio" name="list" value="2" className="left-10"></input>
+                        <input type="radio" name="list" value="2" className="left-10" onChange={handle}></input>
                         아니요
                     </div>
                 </div>
-                <div id='설문 문항 2'>
+                <div id='설문 문항 2' className="w-full">
                     <div className="w-full bg-gray-400/25 border-b-blue-400">
-                            2. 숙제를 하지 않았다면 <br></br>그 이유는 무엇인가요?
-                        </div>
-                        <div className="flex">
-                            <input type="text" name="list1" className="border-2 w-full mt-3"></input>
-                            
-                        </div>
+                        2. 숙제를 하지 않았다면 <br></br>그 이유는 무엇인가요?
                     </div>
-                <div id='설문 문항 3'>
-
+                    <div className=" w-full">
+                        <input type="text" className="border-2 w-full h-8"
+                            autoComplete='off' required onChange={(e) => { Setwhat(e.target.value) }} />
+                    </div>
                 </div>
+                <div className="px-10 mt-3">
+                    <div className="px-1 py-1 bg-blue-600/90 flex justify-center text-white font-bold rounded-lg" onChange={(e) => { console.log(e.target.value) }}>
+                        <button onClick={submit}>입력하기!</button>
+                    </div>
+                </div>
+
             </div>
 
         </div>

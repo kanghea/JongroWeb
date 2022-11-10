@@ -127,7 +127,7 @@ app.post('/api/teacher/student', (req, res) => {
     const Week = req.body.Week;
     const Time = req.body.Time;
     const Class = req.body.Class
-    
+
     var inputPw = crypto.createHash('sha512').update(`${Birthday}`).digest('base64');
     const sqlInsert = `INSERT INTO jongro.student (Name, grade, rate, login_id, password, teacher,class) VALUES ('${Name}', '${Grade}', '${Rate}', '${Name}', '${inputPw}', '${Teacher}','${Class}')`;
     const sqlin = `INSERT INTO jongro.homework (name) VALUES ('${Name}');`
@@ -191,6 +191,46 @@ app.post("/api/teacher/acc", (req, res) => {
         return res.send("error");
     }
 });
+app.post('/api/student/homework', (req, res) => {
+    const wh = req.body.wh;
+    var what = req.body.what;
+    if(wh == 1){
+        
+    }
+    var inputPw = crypto.createHash('sha512').update(`${inputPw}`).digest('base64');
+    console.log(inputPw)
+    const sqlInsert = `SELECT ID,login_id,password,Name from teacher WHERE login_id= '${inputId}' AND password = '${inputPw}'`;
+
+    database.query(sqlInsert, (err, result) => {
+        if (err) {
+            console.log(`${err}는 이거`);
+        } else if (result) {
+            if(result[0] == null){
+                console.log("아니다");
+                res.send(200,"error");
+            } else{                
+                ID = result[0].ID
+                login_id = result[0].login_id
+                password = result[0].password
+                Name = result[0].Name
+                
+                var pass = crypto.createHash('sha512').update(`${password}`).digest('base64');
+                
+                let data = {
+                    password:pass
+                }
+                const jwtSecretKey = process.env.TEAJWT_SECRET_KEY;
+                
+                var token = jwt.sign(data, jwtSecretKey,{expiresIn: '5days'});
+                
+                res.send(200,token) 
+                console.log(token)
+                
+            }
+        }
+    })
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port: ${PORT}`);
 });
