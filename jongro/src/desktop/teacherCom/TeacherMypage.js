@@ -36,14 +36,47 @@ function TeacherMypage() {
                 </div>
 
                 <img src='../img/banner1.png' className='rounded-md mt-3 shadow-md' />
-                <ul className='flex justify-between align-middle items-center h-auto mt-5'>
-                    <li className='flex justify-center bg-slate-300 w-full mr-5 h-full text-center items-center p-3'>
+                <div className='flex p-3 bg-slate-500/5 w-full h-[120px] mt-10'>
+                    <div className='h-full w-auto pr-2 border-r-2'>
+                        초등SKY반
+                    </div>
+                    <div className='flex flex-col h-full'>
+                        <div className='px-2'>
+                            강해 O 관영 X 정원 O
+                        </div>
+                        <div className='px-2 h-full pt-12'>
+                            수요일 6:30
+                        </div>
+                    </div>
+                </div>
 
-                    </li>
-                    <li className='flex justify-center bg-slate-300 w-full mr-5 h-full p-3'>2</li>
-                    <li className='flex justify-center bg-slate-300 w-full mr-5 h-full items-center'>3</li>
-                    <li className='flex justify-center bg-slate-300 w-full h-full items-center'>4</li>
-                </ul>
+                <div className='flex p-3 bg-slate-500/5 w-full h-[120px] mt-10'>
+                    <div className='h-full w-auto pr-2 border-r-2'>
+                        초등SKY반
+                    </div>
+                    <div className='flex flex-col h-full'>
+                        <div className='px-2'>
+                            강해 O 관영 X 정원 O
+                        </div>
+                        <div className='px-2 h-full pt-12'>
+                            수요일 6:30
+                        </div>
+                    </div>
+                </div>
+
+                <div className='flex p-3 bg-slate-500/5 w-full h-[120px] mt-10'>
+                    <div className='h-full w-auto pr-2 border-r-2'>
+                        초등SKY반
+                    </div>
+                    <div className='flex flex-col h-full'>
+                        <div className='px-2'>
+                            강해 O 관영 X 정원 O
+                        </div>
+                        <div className='px-2 h-full pt-12'>
+                            수요일 6:30
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>)

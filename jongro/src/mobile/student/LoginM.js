@@ -44,7 +44,7 @@ function LoginM() {
     };
     return (
 
-        <div>
+        <div class="bo">
             <div className='w-full h-screen bg-blue-900'>
                 <div className='flex justify-center items-center text-white h-full flex-col'>
                     <div className='flex justify-center flex-col align-middle text-center'>

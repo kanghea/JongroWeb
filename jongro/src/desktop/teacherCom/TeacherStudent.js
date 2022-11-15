@@ -57,7 +57,7 @@ function TeacherStudent() {
             <div class="body1">
                 <section class="login-form">
                     <div className='flex justify-center items-center'>
-                        <img alt='logoimg' src="../img/jongrologo.png" className='w-32 items-center'></img><img src='../img/회원가입.png' className='w-auto h-28'></img>
+                        <img alt='logoimg' src="../img/jongrologo.png" className='w-32 items-center'></img>
                     </div>
                     <from action="">
                         <div class="int-area">

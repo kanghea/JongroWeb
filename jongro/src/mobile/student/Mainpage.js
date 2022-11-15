@@ -1,12 +1,40 @@
 import Header from "./Header";
-
+import Nav from "./Nav";
+import Axios from "axios";
+import { useState } from "react";
 function Mainpage() {
 
+    (function () {
+        const login_id = (localStorage.getItem('login_id'));
+        const ACcesstoken = (localStorage.getItem('access-token'));
+        Axios.post('http://localhost:3001/api/student/acc', {
+            login_id: login_id,
+            token: ACcesstoken
+        }).then((res) => {
+            if (res.data == null) {
+                alert("로그인 하지 않으셨어요!")
+                window.location.href = '/m'
+            }
+        });
+        Axios.post('http://localhost:3001/api/student/homework/acc', {
+            login_id: login_id
+        }).then((res) => {
+            console.log(res.data)
+            if (res.data == 'success') {
+                window.localStorage.setItem('homework', "완료");
+            } else{
+                window.localStorage.setItem('homework','미완료');
+            }
+        });
+        
+    })();
+
     const login_id = (localStorage.getItem('login_id'));
+    setTimeout(function(){var homework = (localStorage.getItem('homework'))},10);
     return (
-        <div>
+        <div className="h-screen">
             <div alt="header" className="flex h-10 flex-col fixed w-full">
-                <Header/>
+                <Header />
                 <div alt="네비게이션" className="pb-2 pt-16">
                     <div className="text-slate-600 font-semibold">서비스 목록</div>
                     <div className="text-slate-700 font-thin text-xs"> *업데이트가 지속적으로 이뤄질 예정입니다.</div>
@@ -17,7 +45,7 @@ function Mainpage() {
                     <div className="flex justify-between">
                         <div>숙제자가진단</div>
                         <div className="flex flex-col">
-                            <div>미참여</div>
+                            <div>{localStorage.getItem('homework')}</div>
                         </div>
                     </div>
                     <div className="flex justify-between pr-24">
@@ -26,7 +54,7 @@ function Mainpage() {
                     </div>
                 </a>
             </div>
-            <div alt="목록"></div>
+            <Nav />
         </div>
     )
 }

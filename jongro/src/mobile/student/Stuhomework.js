@@ -4,19 +4,27 @@ import Axios from "axios";
 function Stuhomework() {
     const [wh, Setwh] = useState('');
     const [what, Setwhat] = useState('');
+    const login_id = (localStorage.getItem('login_id'));
 
     const handle = (e) => {
         console.log(e.target.value);
         Setwh(e.target.value);
     }
     const submit = (e) => {
+        console.log(what)
         Axios.post('http://localhost:3001/api/student/homework', {
             wh: wh,
-            what: what
+            what: what,
+            login_id: login_id
+
         }).then((res) => {
-            alert("숙제체크가 완료되었습니다.")
-            
-        }).catch(()=>{alert('어라.. 어째서 오류가..?')});
+            if (res) {
+                alert("숙제체크가 완료되었습니다.")
+                window.location.href = '/m/student'
+            }
+
+
+        }).catch(() => { alert('어라.. 어째서 오류가..?') });
     }
     return (
         <div>
