@@ -1,13 +1,13 @@
 import Header from "./Header";
 import Nav from "./Nav";
-import { axiosInstance } from "../../config";
+import axios from 'axios';
 import { useState } from "react";
 function Mainpage() {
 
     (function () {
         const login_id = (localStorage.getItem('login_id'));
         const ACcesstoken = (localStorage.getItem('access-token'));
-        axiosInstance.post('http://localhost:3001/api/student/acc', {
+        axios.post('http://localhost:3001/api/student/acc', {
             login_id: login_id,
             token: ACcesstoken
         }).then((res) => {
@@ -16,7 +16,7 @@ function Mainpage() {
                 window.location.href = '/m'
             }
         });
-        axiosInstance.post('http://localhost:3001/api/student/homework/acc', {
+        axios.post('http://localhost:3001/api/student/homework/acc', {
             login_id: login_id
         }).then((res) => {
             console.log(res.data)
