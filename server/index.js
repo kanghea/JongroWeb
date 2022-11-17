@@ -22,9 +22,10 @@ const database = mysql.createPool({
 });
 
 app.use(express.json());
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(express.static(path.join(__dirname, "/build")));
 
 const cors = require('cors');
 const { response } = require('express');
