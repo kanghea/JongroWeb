@@ -2,7 +2,7 @@ import './mainm.css';
 
 import { useState } from 'react';
 
-import Axios from 'axios';
+import { axiosInstance } from "../../config";
 
 function Login() {
     const [inputPW, setInputPw] = useState('');
@@ -11,7 +11,7 @@ function Login() {
     (function () {
         const login_id = (localStorage.getItem('login_id'));
         const ACcesstoken =(localStorage.getItem('access-token'));
-        Axios.post('http://localhost:3001/api/student/acc', {
+        axiosInstance.post('http://localhost:3001/api/student/acc', {
                 login_id: login_id,
                 token: ACcesstoken
             }).then((res) => {
@@ -27,7 +27,7 @@ function Login() {
     })();
 
     const submitLogin = () => {
-        Axios.post('http://localhost:3001/api/login/student', {
+        axiosInstance.post('http://localhost:3001/api/login/student', {
             inputID: inputID,
             inputPW: inputPW
         }).then((res) => {

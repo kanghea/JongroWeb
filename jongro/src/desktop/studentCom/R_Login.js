@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { axiosInstance } from "../../config";
  
 function R_Login() {
     const [inputId, setInputId] = useState('')
@@ -21,7 +21,7 @@ function R_Login() {
  
 	// 페이지 렌더링 후 가장 처음 호출되는 함수
     useEffect(() => {
-        axios.get('/user_inform/login')
+        axiosInstance.get('/user_inform/login')
         .then(res => console.log(res))
         .catch()
     },

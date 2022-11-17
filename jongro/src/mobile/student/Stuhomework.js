@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Header from "./Header";
-import Axios from "axios";
+import { axiosInstance } from "../../config";
 function Stuhomework() {
     const [wh, Setwh] = useState('');
     const [what, Setwhat] = useState('');
@@ -12,7 +12,7 @@ function Stuhomework() {
     }
     const submit = (e) => {
         console.log(what)
-        Axios.post('http://localhost:3001/api/student/homework', {
+        axiosInstance.post('http://localhost:3001/api/student/homework', {
             wh: wh,
             what: what,
             login_id: login_id

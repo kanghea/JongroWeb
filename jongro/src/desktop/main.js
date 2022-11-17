@@ -1,16 +1,11 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+import { axiosInstance } from "../config";
 import HeaderBenner from './components/HeaderBenner';
 import Title from './components/Title';
 import Header from './components/Header';
 import HeaderFixed from './components/HeaderFixed';
 import Last from "./components/last";
 import Act from './components/Act';
-
-(function () {
-
-  
-})();
 
 function Main() {
   const [navbar, setNavbar] = useState(true);
