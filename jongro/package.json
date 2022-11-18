@@ -25,6 +25,10 @@
     "eject": "react-scripts eject",
     "heroku-postbuild": "npm run build & npm start"
   },
+  "engines": {
+    "npm": "8.15.0",
+    "node": "16.17.0"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
