@@ -280,7 +280,6 @@ app.listen(PORT, () => {
             else {
                 console.log(result)
                 console.log("성공적으로 입력!")
-
             }
         })
     });
