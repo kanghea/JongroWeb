@@ -23,7 +23,6 @@ function Main() {
       {navbar ? <Header /> : <HeaderFixed />}
       <Title />
       <Act />
-      <Last />
     </div>
   );
 }

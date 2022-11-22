@@ -53,12 +53,10 @@ root.render(
       </Routes>
     </BrowserView>
     <MobileView>
-
       <Route path="/acc" element={<LoginM/>}></Route>
       <Route path="/" element={<Login/>} />
       <Route path="/student" element={<Mainpage/>}/>
       <Route path="/student/homework" element={<Stuhomework/>}/>
-
     </MobileView>
   </Router>
 );
