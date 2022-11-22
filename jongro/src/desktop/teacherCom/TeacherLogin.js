@@ -28,10 +28,13 @@ function TeacherLogin() {
         axios.post('http://162.248.101.98:3001/api/login/teacher', {
             inputID: inputID,
             inputPW: inputPW
-        }).then((res) => {
+        }).then((res,err) => {
             if(res.data == "error"){
                 alert("옳지 않아요!!");
-            }else{
+            } if(err){
+                alert(err);
+            }
+            else{
                 alert("옳게 입력하셨네영!");
                 setAccessToken(res.data);
                 localStorage.setItem('login_id' , `${inputID}`);
