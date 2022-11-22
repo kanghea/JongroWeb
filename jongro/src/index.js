@@ -19,7 +19,6 @@ import Loading from './desktop/loading';
 import Err from './desktop/Err';
 import TeacherLoginacc from './desktop/teacherCom/TeacherLoginacc';
 import TeacherStudent from './desktop/teacherCom/TeacherStudent';
-import MLogin from './mobile/student/Mainpage';
 import LoginM from './mobile/student/LoginM';
 import Mainpage from './mobile/student/Mainpage';
 import Login from './mobile/student/Login';
@@ -54,9 +53,12 @@ root.render(
       </Routes>
     </BrowserView>
     <MobileView>
-    <Route path="/acc" element={<LoginM/>}></Route>
-    <Route path="/student" element={<Mainpage/>}/>
-    <Route path="/student/homework" element={<Stuhomework/>}/>
+
+      <Route path="/acc" element={<LoginM/>}></Route>
+      <Route path="/" element={<Login/>} />
+      <Route path="/student" element={<Mainpage/>}/>
+      <Route path="/student/homework" element={<Stuhomework/>}/>
+
     </MobileView>
   </Router>
 );

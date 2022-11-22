@@ -11,7 +11,7 @@ function Login() {
     (function () {
         const login_id = (localStorage.getItem('login_id'));
         const ACcesstoken =(localStorage.getItem('access-token'));
-        axios.post('http://localhost:3001/api/student/acc', {
+        axios.post('http://162.248.101.98:3001/api/student/acc', {
                 login_id: login_id,
                 token: ACcesstoken
             }).then((res) => {
@@ -27,7 +27,7 @@ function Login() {
     })();
 
     const submitLogin = () => {
-        axios.post('http://localhost:3001/api/login/student', {
+        axios.post('http://162.248.101.98:3001/api/login/student', {
             inputID: inputID,
             inputPW: inputPW
         }).then((res) => {

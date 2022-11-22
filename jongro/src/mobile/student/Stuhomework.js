@@ -12,7 +12,7 @@ function Stuhomework() {
     }
     const submit = (e) => {
         console.log(what)
-        axios.post('http://localhost:3001/api/student/homework', {
+        axios.post('http://162.248.101.98:3001/api/student/homework', {
             wh: wh,
             what: what,
             login_id: login_id

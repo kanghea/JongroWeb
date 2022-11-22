@@ -6,7 +6,7 @@ function TeacherLogin() {
     (function () {
         const login_id = (localStorage.getItem('login_id'));
         const ACcesstoken =(localStorage.getItem('access-token'));
-        axios.post('http://localhost:3001/api/teacher/acc', {
+        axios.post('http://162.248.101.98:3001/api/teacher/acc', {
                 login_id: login_id,
                 token: ACcesstoken
             }).then((res) => {
@@ -25,7 +25,7 @@ function TeacherLogin() {
     const [accesstoken, setAccessToken] = useState('');
 
     const submitLogin = () => {
-        axios.post('http://localhost:3001/api/login/teacher', {
+        axios.post('http://162.248.101.98:3001/api/login/teacher', {
             inputID: inputID,
             inputPW: inputPW
         }).then((res) => {
