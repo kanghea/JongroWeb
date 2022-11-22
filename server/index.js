@@ -31,7 +31,7 @@ const { response } = require('express');
 
 
 const corsOptions = {
-    origin: "http://localhost:3000",
+    origin: "http://162.248.101.98/",
     credentials: true
 };
 app.use(cors(corsOptions));

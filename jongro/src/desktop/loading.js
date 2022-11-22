@@ -1,8 +1,8 @@
 function Loading(){
     setTimeout(() => {window.location.href='/main';}, 3000);
     return(
-    <div>
-        로딩페이지입니다!    
+    <div className="w-screen h-screen">
+        <img src="public/img/loading.png" className="w-full h-full"/>  
     </div>)
 }
 
