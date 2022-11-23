@@ -8,17 +8,11 @@ const crypto = require("crypto");
 
 dotenv.config();
 const app = express();
-const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: process.env.password,
-    database: 'cruddatabase'
-});
 const database = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
+    host: '162.248.101.98',
+    user: 'admin',
     password: process.env.password,
-    database: 'jongro'
+    database: 'jongrosky'
 });
 
 app.use(express.json());
@@ -35,14 +29,6 @@ const corsOptions = {
     credentials: true
 };
 app.use(cors(corsOptions));
-app.post('/api/insert', (req, res) => {
-    console.log('??')
-    const movieName = req.body.movieName;
-    const movieReview = req.body.movieReview;
-    console.log(`이건${movieName}`)
-    const sqlInsert = `INSERT INTO movie_review (movie_name, movie_revie) VALUES ('${movieName}', '${movieReview}'); `;
-    db.query(sqlInsert, (err, result) => { console.log(result); });
-});
 
 app.post('/api/login/student', (req, res) => {
     const inputId = req.body.inputID;
@@ -129,8 +115,8 @@ app.post('/api/teacher/student', (req, res) => {
     const Class = req.body.Class
 
     var inputPw = crypto.createHash('sha512').update(`${Birthday}`).digest('base64');
-    const sqlInsert = `INSERT INTO jongro.student (Name, grade, rate, login_id, password, teacher,class) VALUES ('${Name}', '${Grade}', '${Rate}', '${Name}', '${inputPw}', '${Teacher}','${Class}')`;
-    const sqlin = `INSERT INTO jongro.homework (name) VALUES ('${Name}');`
+    const sqlInsert = `INSERT INTO jongrosky.student (Name, grade, rate, login_id, password, teacher,class) VALUES ('${Name}', '${Grade}', '${Rate}', '${Name}', '${inputPw}', '${Teacher}','${Class}')`;
+    const sqlin = `INSERT INTO jongrosky.homework (name) VALUES ('${Name}');`
 
     database.query(sqlInsert, (err, result) => {
         if (err) {
@@ -206,7 +192,7 @@ app.post('/api/student/homework', (req, res) => {
 
     if (wh == 1) {
         console.log(did)
-        var sqlin2 = `UPDATE jongro.homework SET \`${did}\` = '1' WHERE (name = '${login_id}');`;
+        var sqlin2 = `UPDATE jongrosky.homework SET \`${did}\` = '1' WHERE (name = '${login_id}');`;
         database.query(sqlin2, (err, result) => {
             if (err) {
                 console.log(err)
@@ -218,10 +204,10 @@ app.post('/api/student/homework', (req, res) => {
             }
         })
     } else {
-        var sqlin2 = `UPDATE jongro.homework SET \`${did}\` = '${what}' WHERE (name = '${login_id}');`
+        var sqlin2 = `UPDATE jongrosky.homework SET \`${did}\` = '${what}' WHERE (name = '${login_id}');`
         database.query(sqlin2, (result) => {
             if (result == null) {
-                var sqlin2 = `UPDATE jongro.homework SET \`${did}\` = '${what}' WHERE (name = '${login_id}');`
+                var sqlin2 = `UPDATE jongrosky.homework SET \`${did}\` = '${what}' WHERE (name = '${login_id}');`
                 database.query(sqlin2,(result)=>{
                     console.log(result);
                     res.send("success")
@@ -270,7 +256,7 @@ app.listen(PORT, () => {
 
     const did = `${month}/${day}`
 
-    const sql = `ALTER TABLE jongro.homework ADD COLUMN ${did} TEXT NULL`
+    const sql = `ALTER TABLE jongrosky.homework ADD COLUMN ${did} TEXT NULL`
 
     const dat = '0 1 ? * 0-6';
 
