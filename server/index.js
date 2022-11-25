@@ -109,12 +109,7 @@ app.post('/api/teacher/student', (req, res) => {
     const Grade = req.body.Grade;
     const Teacher = req.body.Teacher;
     const Birthday = req.body.Birthday;
-    const monday = req.body.monday;
-    const thesday = req.body.thesday;
-    const wedenesday = req.body.wedenesday;
-    const thrusday = req.body.thrusday;
-    const friday = req.body.friday;
-    const saturday = req.body.saturday;
+
 
     var inputPw = crypto.createHash('sha512').update(`${Birthday}`).digest('base64');
     const sqlInsert = `INSERT INTO jongrosky.student (Name, grade, login_id, password, teacher,class) VALUES ('${Name}', '${Grade}', '${Name}', '${inputPw}', '${Teacher}','${Class}')`;
@@ -258,7 +253,7 @@ app.listen(PORT, () => {
 
     const did = `${month}/${day}`
 
-    const sql = `ALTER TABLE jongrosky.homework ADD COLUMN ${did} TEXT NULL`
+    const sql = `ALTER TABLE jongrosky.homework ADD COLUMN \`${did}\` TEXT NULL`
 
     const dat = '0 1 ? * 0-6';
 
