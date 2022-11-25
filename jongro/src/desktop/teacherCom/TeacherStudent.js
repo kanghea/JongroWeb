@@ -21,22 +21,24 @@ function TeacherStudent() {
     
     const [Name, setName] = useState('');
     const [Grade, setGrade] = useState('');
-    const [Rate, setRate] = useState('');
-    const [Time, setTime] = useState('');
     const [Teacher, setTeacher] = useState('');
     const [Birthday, setBirthday] = useState('');
-    const [Week, setWeek] = useState('');
     const [sclass, setsClass] = useState('');
+    const [monday, setMonday] = useState('');
+    const [thesday, setThesday] = useState('');
+    const [wendnesday, setWendnesday] = useState('');
+    const [thrusday, setThrusday] = useState('');
+    const [friday, setFriday] = useState('');
+    const [saturday, setSaturday] = useState('');
  
 
     const submitLogin = () => {
         axios.post('http://162.248.101.98:3001/api/teacher/student', {
             Name: Name,
             Grade: Grade,
-            Rate: Rate,
             Teacher: Teacher,
             Birthday: Birthday,
-            Class:sclass
+            Class:sclass,
 
         }).then((res) => {
             if(res.data == "err"){
@@ -71,11 +73,6 @@ function TeacherStudent() {
                             <label for='pw'>학년을 입력해주세요</label>
                         </div>
                         <div class="int-area">
-                            <input type="text" name="pw" id="pw"
-                                autoComplete='off' required onChange={(e) => { setRate(e.target.value) }} />
-                            <label for='pw'>요금이 어떻게 되나요?</label>
-                        </div>
-                        <div class="int-area">
                             <input type="text" name="pw2" id="pw2"
                                 autoComplete='off' required onChange={(e) => { setTeacher(e.target.value) }} />
                             <label for='pw'>담당하는 선생님이 누군가요?</label>
@@ -89,6 +86,36 @@ function TeacherStudent() {
                             <input type="text" name="pw2" id="pw2"
                                 autoComplete='off' required onChange={(e) => { setBirthday(e.target.value) }} />
                             <label for='pw'>생년월일을 알려주세요</label>
+                        </div>
+                        <div class="int-area">
+                            <input type="text" name="pw" id="pw"
+                                autoComplete='off' required onChange={(e) => { setMonday(e.target.value) }} />
+                            <label for='pw'>월요일에 몇시에 오시나요?</label>
+                        </div>
+                        <div class="int-area">
+                            <input type="text" name="pw" id="pw"
+                                autoComplete='off' required onChange={(e) => { setThesday(e.target.value) }} />
+                            <label for='pw'>화요일에 몇시에 오시나요?</label>
+                        </div>
+                        <div class="int-area">
+                            <input type="text" name="pw" id="pw"
+                                autoComplete='off' required onChange={(e) => { setWendnesday(e.target.value) }} />
+                            <label for='pw'>수요일에 몇시에 오시나요?</label>
+                        </div>
+                        <div class="int-area">
+                            <input type="text" name="pw" id="pw"
+                                autoComplete='off' required onChange={(e) => { setThrusday(e.target.value) }} />
+                            <label for='pw'>목요일에 몇시에 오시나요?</label>
+                        </div>
+                        <div class="int-area">
+                            <input type="text" name="pw" id="pw"
+                                autoComplete='off' required onChange={(e) => { setFriday(e.target.value) }} />
+                            <label for='pw'>금요일에 몇시에 오시나요?</label>
+                        </div>
+                        <div class="int-area">
+                            <input type="text" name="pw" id="pw"
+                                autoComplete='off' required onChange={(e) => { setSaturday(e.target.value) }} />
+                            <label for='pw'>토요일에 몇시에 오시나요?</label>
                         </div>
                         <div class="btn-area">
                             <button onClick={submitLogin}>입력하기!</button>

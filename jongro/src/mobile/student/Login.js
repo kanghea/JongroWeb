@@ -54,7 +54,7 @@ function Login() {
                             <img alt='logoimg' src="../img/jongrologo.png" className='w-32 items-center'></img>
                         </div>
                         <br></br>
-                        <div className='text-xl font-semibold'>종로연구소</div>
+                        <div className='text-2xl font-semibold'>종로연구소</div>
                         <div class='int-area1'>
                             <input type="Text" name="id" id="id"
                                 autoComplete='off' required onChange={(e) => { setInputID(e.target.value) }} />

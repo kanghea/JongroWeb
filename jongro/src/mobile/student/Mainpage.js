@@ -41,7 +41,7 @@ function Mainpage() {
                 </div>
             </div>
             <div alt="content" className="px-1 pt-28">
-                <a alt="숙제 자가진단" className="flex text-sm justify-between px-1 bg-blue-900 text-white rounded-lg h-20 pt-2 flex-col" href="/student/homework">
+                <a alt="숙제 자가진단" className="flex text-sm justify-between px-1 bg-blue-900 text-white rounded-lg h-20 pt-2 flex-col" href="/m/student/homework">
                     <div className="flex justify-between">
                         <div>숙제자가진단</div>
                         <div className="flex flex-col">
@@ -54,7 +54,11 @@ function Mainpage() {
                     </div>
                 </a>
             </div>
-            <Nav />
+            <div alt="navbar" className="fixed flex w-full p-3 justify-between bottom-0">
+                <div>홈</div>
+                <div>통계</div>
+                <div>랭킹</div>
+            </div>
         </div>
     )
 }

@@ -35,7 +35,7 @@ function LoginM() {
             }else{
                 alert("옳게 입력하셨네영!");
                 localStorage.setItem('access-token' , `${res.data}`);
-                window.location.href = '/student/homework';
+                window.location.href = '/m/student';
             }
             
         }).catch(()=>{alert('어라.. 어째서 오류가..?')});

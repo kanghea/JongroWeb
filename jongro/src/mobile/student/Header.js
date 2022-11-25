@@ -13,7 +13,7 @@ function Header() {
             </div>
             <div className="w-full h-7 bg-slate-700 text-white flex justify-between px-1 items-center py-1 pb-1">
                 <div className="text-sm">종로어시스턴트</div>
-                <div className="text-xs">처음으로</div>
+                <a className="text-xs" href="/m/student">처음으로</a>
             </div>
         </div>
     )

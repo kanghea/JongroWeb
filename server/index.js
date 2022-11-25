@@ -9,7 +9,7 @@ const crypto = require("crypto");
 dotenv.config();
 const app = express();
 const database = mysql.createPool({
-    host: '162.248.101.98',
+    host: '127.0.0.1',
     user: 'admin',
     password: process.env.password,
     database: 'jongrosky'
@@ -80,7 +80,7 @@ app.post('/api/login/teacher', (req, res) => {
             console.log(`${err}는 이거`);
         } else if (result) {
             if (result[0] == null) {
-                console.log("아니다");
+                console.log("no");
                 res.send(200, "error");
             } else {
                 ID = result[0].ID
@@ -107,12 +107,14 @@ app.post('/api/login/teacher', (req, res) => {
 app.post('/api/teacher/student', (req, res) => {
     const Name = req.body.Name;
     const Grade = req.body.Grade;
-    const Rate = req.body.Rate;
     const Teacher = req.body.Teacher;
     const Birthday = req.body.Birthday;
-    const Week = req.body.Week;
-    const Time = req.body.Time;
-    const Class = req.body.Class
+    const monday = req.body.monday;
+    const thesday = req.body.thesday;
+    const wedenesday = req.body.wedenesday;
+    const thrusday = req.body.thrusday;
+    const friday = req.body.friday;
+    const saturday = req.body.saturday;
 
     var inputPw = crypto.createHash('sha512').update(`${Birthday}`).digest('base64');
     const sqlInsert = `INSERT INTO jongrosky.student (Name, grade, rate, login_id, password, teacher,class) VALUES ('${Name}', '${Grade}', '${Rate}', '${Name}', '${inputPw}', '${Teacher}','${Class}')`;

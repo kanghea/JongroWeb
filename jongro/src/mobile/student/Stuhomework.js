@@ -2,6 +2,21 @@ import { useState } from "react";
 import Header from "./Header";
 import axios from 'axios';
 function Stuhomework() {
+    (function() {
+        const login_id = (localStorage.getItem('login_id'));
+        const ACcesstoken =(localStorage.getItem('access-token'));
+        axios.post('http://162.248.101.98:3001/api/student/acc', {
+                login_id: login_id,
+                token: ACcesstoken
+            }).then((res) => {
+                if(res.data == 'error'){
+                    alert("로그인하지 않았어요! ")
+                    window.location.href = '/m';
+                } else{
+                    console.log("로그인 승인")
+                }
+            });
+    })();
     const [wh, Setwh] = useState('');
     const [what, Setwhat] = useState('');
     const login_id = (localStorage.getItem('login_id'));
