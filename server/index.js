@@ -117,7 +117,7 @@ app.post('/api/teacher/student', (req, res) => {
     const saturday = req.body.saturday;
 
     var inputPw = crypto.createHash('sha512').update(`${Birthday}`).digest('base64');
-    const sqlInsert = `INSERT INTO jongrosky.student (Name, grade, rate, login_id, password, teacher,class) VALUES ('${Name}', '${Grade}', '${Rate}', '${Name}', '${inputPw}', '${Teacher}','${Class}')`;
+    const sqlInsert = `INSERT INTO jongrosky.student (Name, grade, login_id, password, teacher,class) VALUES ('${Name}', '${Grade}', '${Name}', '${inputPw}', '${Teacher}','${Class}')`;
     const sqlin = `INSERT INTO jongrosky.homework (name) VALUES ('${Name}');`
 
     database.query(sqlInsert, (err, result) => {

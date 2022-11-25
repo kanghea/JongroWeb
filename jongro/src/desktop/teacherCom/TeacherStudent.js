@@ -87,36 +87,6 @@ function TeacherStudent() {
                                 autoComplete='off' required onChange={(e) => { setBirthday(e.target.value) }} />
                             <label for='pw'>생년월일을 알려주세요</label>
                         </div>
-                        <div class="int-area">
-                            <input type="text" name="pw" id="pw"
-                                autoComplete='off' required onChange={(e) => { setMonday(e.target.value) }} />
-                            <label for='pw'>월요일에 몇시에 오시나요?</label>
-                        </div>
-                        <div class="int-area">
-                            <input type="text" name="pw" id="pw"
-                                autoComplete='off' required onChange={(e) => { setThesday(e.target.value) }} />
-                            <label for='pw'>화요일에 몇시에 오시나요?</label>
-                        </div>
-                        <div class="int-area">
-                            <input type="text" name="pw" id="pw"
-                                autoComplete='off' required onChange={(e) => { setWendnesday(e.target.value) }} />
-                            <label for='pw'>수요일에 몇시에 오시나요?</label>
-                        </div>
-                        <div class="int-area">
-                            <input type="text" name="pw" id="pw"
-                                autoComplete='off' required onChange={(e) => { setThrusday(e.target.value) }} />
-                            <label for='pw'>목요일에 몇시에 오시나요?</label>
-                        </div>
-                        <div class="int-area">
-                            <input type="text" name="pw" id="pw"
-                                autoComplete='off' required onChange={(e) => { setFriday(e.target.value) }} />
-                            <label for='pw'>금요일에 몇시에 오시나요?</label>
-                        </div>
-                        <div class="int-area">
-                            <input type="text" name="pw" id="pw"
-                                autoComplete='off' required onChange={(e) => { setSaturday(e.target.value) }} />
-                            <label for='pw'>토요일에 몇시에 오시나요?</label>
-                        </div>
                         <div class="btn-area">
                             <button onClick={submitLogin}>입력하기!</button>
                         </div>
