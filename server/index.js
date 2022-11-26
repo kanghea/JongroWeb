@@ -12,7 +12,8 @@ const database = mysql.createPool({
     host: '127.0.0.1',
     user: 'admin',
     password: process.env.password,
-    database: 'jongrosky'
+    database: 'jongrosky',
+    port:'3306'
 });
 
 app.use(express.json());
@@ -25,7 +26,7 @@ const { response } = require('express');
 
 
 const corsOptions = {
-    origin: "http://162.248.101.98/",
+    origin: "http://162.248.101.98",
     credentials: true
 };
 app.use(cors(corsOptions));
@@ -109,6 +110,7 @@ app.post('/api/teacher/student', (req, res) => {
     const Grade = req.body.Grade;
     const Teacher = req.body.Teacher;
     const Birthday = req.body.Birthday;
+    const Class = req.body.Class;
 
 
     var inputPw = crypto.createHash('sha512').update(`${Birthday}`).digest('base64');
