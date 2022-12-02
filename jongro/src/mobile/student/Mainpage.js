@@ -19,18 +19,20 @@ function Mainpage() {
         axios.post('http://162.248.101.98:3001/api/student/homework/acc', {
             login_id: login_id
         }).then((res) => {
-            console.log(res.data)
             if (res.data == 'success') {
                 window.localStorage.setItem('homework', "완료");
             } else{
                 window.localStorage.setItem('homework','미완료');
             }
         });
+        axios.post('http://162.248.101.98:3001/api/student/class/acc', {
+            login_id: login_id
+        }).then((res) => {
+            window.localStorage.setItem('class',`${res.data}`);
+        });
         
     })();
-
     const login_id = (localStorage.getItem('login_id'));
-    setTimeout(function(){var homework = (localStorage.getItem('homework'))},10);
     return (
         <div className="h-screen">
             <div alt="header" className="flex h-10 flex-col fixed w-full">
@@ -49,8 +51,7 @@ function Mainpage() {
                         </div>
                     </div>
                     <div className="flex justify-between pr-24">
-                        <div>{login_id} ㅣ</div>
-                        <div>종로학원 고등 A반</div>
+                        <div>{login_id} ㅣ{localStorage.getItem('class')}</div>
                     </div>
                 </a>
             </div>

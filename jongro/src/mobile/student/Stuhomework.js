@@ -26,19 +26,15 @@ function Stuhomework() {
         Setwh(e.target.value);
     }
     const submit = (e) => {
-        console.log(what)
         axios.post('http://162.248.101.98:3001/api/student/homework', {
             wh: wh,
             what: what,
             login_id: login_id
-
         }).then((res) => {
             if (res) {
                 alert("숙제체크가 완료되었습니다.")
                 window.location.href = '/m/student'
             }
-
-
         }).catch(() => { alert('어라.. 어째서 오류가..?') });
     }
     return (

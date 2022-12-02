@@ -256,6 +256,7 @@ app.listen(PORT, () => {
     const did = `${month}/${day}`
 
     const sql = `ALTER TABLE jongrosky.homework ADD COLUMN \`${did}\` TEXT NULL`
+    const sql2 = `ALTER TABLE jongrosky.cheak ADD COLUMN \`${did}\` TEXT NULL`
 
     const dat = '0 1 ? * 0-6';
 

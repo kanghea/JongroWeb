@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.2.0",
     "cors": "^2.8.5",
     "react": "^18.2.0",
     "react-device-detect": "^2.2.2",
@@ -16,7 +17,8 @@
     "react-scripts": "5.0.1",
     "react-table": "^7.8.0",
     "redirect": "^0.2.0",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yarn": "^1.22.19"
   },
   "scripts": {
     "start": "react-scripts start",
