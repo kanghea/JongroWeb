@@ -6,7 +6,6 @@ import Header from './components/Header';
 import HeaderFixed from './components/HeaderFixed';
 import Last from "./components/last";
 import Act from './components/Act';
-import App from "./App.tsx";
 
 function Main() {
   const [navbar, setNavbar] = useState(true);
@@ -24,7 +23,6 @@ function Main() {
       {navbar ? <Header /> : <HeaderFixed />}
       <Title />
       <Act />
-      <App/>
     </div>
   );
 }
