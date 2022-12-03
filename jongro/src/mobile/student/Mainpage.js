@@ -21,16 +21,16 @@ function Mainpage() {
         }).then((res) => {
             if (res.data == 'success') {
                 window.localStorage.setItem('homework', "완료");
-            } else{
-                window.localStorage.setItem('homework','미완료');
+            } else {
+                window.localStorage.setItem('homework', '미완료');
             }
         });
         axios.post('http://162.248.101.98:3001/api/student/class/acc', {
             login_id: login_id
         }).then((res) => {
-            window.localStorage.setItem('class',`${res.data}`);
+            window.localStorage.setItem('class', `${res.data}`);
         });
-        
+
     })();
     const login_id = (localStorage.getItem('login_id'));
     return (
@@ -43,7 +43,7 @@ function Mainpage() {
                 </div>
             </div>
             <div alt="content" className="px-1 pt-28">
-                <a alt="숙제 자가진단" className="flex text-sm justify-between px-1 bg-blue-900 text-white rounded-lg h-20 pt-2 flex-col" href="/m/student/homework">
+                <a alt="숙제 자가진단" className="flex text-sm justify-between px-1 bg-blue-800 text-white rounded-lg h-20 pt-2 flex-col hover:bg-blue-900" href="/m/student/homework">
                     <div className="flex justify-between">
                         <div>숙제자가진단</div>
                         <div className="flex flex-col">

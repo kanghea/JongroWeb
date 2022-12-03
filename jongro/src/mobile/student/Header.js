@@ -4,8 +4,7 @@ function Header() {
         <div alt="header" className="flex h-12 flex-col fixed w-full">
             <div className="w-full flex justify-between items-center px-1 py-1">
                 <div className="flex items-center h-full">
-                    <img src="/img/jongro.png" className="w-6 h-auto" />
-                    <div className="font-medium text-md">종로학원</div>
+                    <div className="font-semibold text-xl text-black">종로학원</div>
                 </div>
                 <div>
                     menu
