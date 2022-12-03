@@ -2,6 +2,7 @@ import Header from "./Header";
 import Nav from "./Nav";
 import axios from 'axios';
 import { useState } from "react";
+import Navbar from "./Navbar";
 function Mainpage() {
 
     (function () {
@@ -55,11 +56,7 @@ function Mainpage() {
                     </div>
                 </a>
             </div>
-            <div alt="navbar" className="fixed flex w-full p-3 justify-between bottom-0">
-                <div>홈</div>
-                <div>통계</div>
-                <div>랭킹</div>
-            </div>
+            <Navbar/>
         </div>
     )
 }
