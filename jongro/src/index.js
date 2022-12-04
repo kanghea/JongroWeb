@@ -21,6 +21,7 @@ import LoginM from './mobile/student/LoginM';
 import Mainpage from './mobile/student/Mainpage';
 import Login from './mobile/student/Login';
 import Stuhomework from './mobile/student/Stuhomework';
+import Mypage from './mobile/student/Mypage';
 
 
 
@@ -48,6 +49,7 @@ root.render(
         <Route path="/m/acc" element={<LoginM/>} />
         <Route path="/m/student" element={<Mainpage/>}/>
         <Route path="/m/student/homework" element={<Stuhomework/>}/>
+        <Route path="/m/student/mypage" element={<Mypage/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
