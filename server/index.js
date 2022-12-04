@@ -247,6 +247,10 @@ app.post('/api/student/homework/acc', (req, res) => {
 const schedule = require('node-schedule');
 
 app.listen(PORT, () => {
+    const offset = 1000 * 60 * 60 * 9
+    const koreaNow = new Date((new Date()).getTime() + offset)
+    console.log(koreaNow)
+
     const date = new Date();
 
     const year = date.getFullYear();
