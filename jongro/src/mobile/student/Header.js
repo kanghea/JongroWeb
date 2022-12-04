@@ -4,7 +4,7 @@ function Header() {
         <div alt="header" className="flex h-12 flex-col fixed w-full">
             <div className="w-full flex justify-between items-center px-1 py-1">
                 <div className="flex items-center h-full">
-                    <div className="font-semibold text-xl text-black">JongroEdusky</div>
+                    <div className="font-semibold text-xl text-black">JongroEdu</div>
                 </div>
                 <div>
                     menu

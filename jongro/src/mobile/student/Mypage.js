@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 
 function Mypage(){
     const login_id = (localStorage.getItem('login_id'));
+
     return(
         <div>
             <Mypageheader/>

@@ -5,6 +5,9 @@ function Mypageheader(){
             <div alt='설정'>
                 <img src="/img/option.png" className="w-7"/>
             </div>
+            <div className="font-medium text-lg">
+                JongroEdu
+            </div>
             <div>
                 {login_id}
             </div>

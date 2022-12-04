@@ -16,8 +16,9 @@ function Loading() {
                 </div>
             </BrowserView>
             <MobileView>
-                <div className="bg-[url('./Mbackground.png')] h-screen text-white/80">
-                    <div alt="배경" className='w-full h-full flex pt-20 pl-10 flex-col'>
+                <div className="h-screen text-white/80">
+                    <img src='/img/Mbackground.png' className='h-full w-full z-0 fixed'/>
+                    <div alt="배경" className='w-full h-full flex pt-20 pl-10 flex-col z-10 relative'>
                         <div>
                             <img src='img/jongrologo2.png' className='h-12' />
                         </div>
