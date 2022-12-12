@@ -24,6 +24,7 @@ import Stuhomework from './mobile/student/Stuhomework';
 import Mypage from './mobile/student/Mypage';
 import TeaLoM from './mobile/teacher/TeaLoM';
 
+import TeaMainpage from './mobile/teacher/TeaMainpage';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -48,6 +49,7 @@ root.render(
 
         <Route path="/m" element={<Login/>} />
         <Route path="/m/teacher" element={<TeaLoM/>} />
+        <Route path="/m/teacher/mypage" element={<TeaMainpage/>} />
         <Route path="/m/acc" element={<LoginM/>} />
         <Route path="/m/student" element={<Mainpage/>}/>
         <Route path="/m/student/homework" element={<Stuhomework/>}/>
