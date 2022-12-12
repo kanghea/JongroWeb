@@ -222,6 +222,41 @@ app.post('/api/student/homework', (req, res) => {
         console.log("잘 입력 됐어요!")
     }
 });
+app.post('/api/login/admin', (req, res) => {
+    const inputId = req.body.inputID;
+    var inputPw = req.body.inputPW;
+    var inputPw = crypto.createHash('sha512').update(`${inputPw}`).digest('base64');
+    console.log(inputPw)
+    const sqlInsert = `SELECT ID,login_id,password,Name from teacher WHERE login_id= '${inputId}' AND password = '${inputPw}'`;
+
+    database.query(sqlInsert, (err, result) => {
+        if (err) {
+            console.log(`${err}는 이거`);
+        } else if (result) {
+            if (result[0] == null) {
+                console.log("no");
+                res.send(200, "error");
+            } else {
+                ID = result[0].ID
+                login_id = result[0].login_id
+                password = result[0].password
+                Name = result[0].Name
+
+                var pass = crypto.createHash('sha512').update(`${password}`).digest('base64');
+
+                let data = {
+                    password: pass
+                }
+                const jwtSecretKey = process.env.ADMJWT_SECRET_KEY;
+
+                var token = jwt.sign(data, jwtSecretKey, { expiresIn: '5days' });
+
+                res.send(200, token)
+                console.log(token)
+            }
+        }
+    })
+});
 
 app.post('/api/student/homework/acc', (req, res) => {
     var login_id = req.body.login_id;

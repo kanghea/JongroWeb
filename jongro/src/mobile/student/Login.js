@@ -3,6 +3,7 @@ import './mainm.css';
 import { useState } from 'react';
 
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Login() {
     const [inputPW, setInputPw] = useState('');
@@ -74,9 +75,9 @@ function Login() {
                     </div>
                 </div>
             </div>
-            <div className='fixed bottom-0 text-white flex justify-between w-full px-20 py-5 text-2xl'>
-                <div>선생님</div>
-                <div>학부모</div>
+            <div className='fixed bottom-0 text-white flex justify-between w-full px-20 py-5 text-xl font-medium'>
+                <Link to='/m/parents'>학부모</Link>
+                <Link to='/m/admin'>관리자</Link>
             </div>
         </div>
     )
