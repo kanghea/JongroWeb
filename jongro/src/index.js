@@ -22,6 +22,7 @@ import Mainpage from './mobile/student/Mainpage';
 import Login from './mobile/student/Login';
 import Stuhomework from './mobile/student/Stuhomework';
 import Mypage from './mobile/student/Mypage';
+import TeaLoM from './mobile/teacher/TeaLoM';
 
 
 
@@ -46,6 +47,7 @@ root.render(
         <Route path="*" element={<Err/>} />
 
         <Route path="/m" element={<Login/>} />
+        <Route path="/m/teacher" element={<TeaLoM/>} />
         <Route path="/m/acc" element={<LoginM/>} />
         <Route path="/m/student" element={<Mainpage/>}/>
         <Route path="/m/student/homework" element={<Stuhomework/>}/>

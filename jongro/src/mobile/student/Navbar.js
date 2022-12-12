@@ -10,9 +10,9 @@ function Navbar() {
                 <img src="/img/통계.png" className="w-5" />
                 통계
             </a>
-            <a className="flex flex-col justify-center items-center text-sm">
-                <img src="/img/QnA.png" className="w-5" />
-                QnA
+            <a className="flex flex-col justify-center items-center text-sm align-middle w-14 h-14">
+                    <img src="/img/QnA.png" className="w-6 z-10"/>
+                    QnA
             </a>
             <a className="flex flex-col justify-center items-center text-sm">
                     <img src="/img/랭킹.png" className="w-5" />

@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap');
+
+* {margin:0; padding:0; box-sizing: border-box;}
+
+.body1 {
+    z-index: 100;
+    font-family: 'IBM Plex Sans KR', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-from {position:relative; z-index: 2;}
+.int-area1 {width: 150px; position: relative;}
+.int-area1:first-child {margin-top: 0;}
+.int-area1 input {
+    width: 100%;
+    padding: 20px 10px 10px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid;
+    font-size: 18px;
+    color: #fff;
+    outline: none;
+}
+.int-area1 label {
+    position: absolute;
+    font-size: 13px;
+    left: 10px;
+    top: 30px;
+    color: #999;
+    transition: all .5s ease;
+}
+.int-area1 label.warnign {
+    color: red !important;
+    animation: warning .3s ease;
+    animation-iteration-count: 3;
+}
+.int-area1 input:focus + label,
+.int-area1 input:valid + label {
+    top: 1px;
+    font-size: 13px;
+    color: #166cea;
+    
+}
+.btn-area1 {
+    margin-top: 30px;
+}
+.btn-area1 button {
+    width: 70px;
+    background-color: #166cea;
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 25px;
+}
+.caption {
+    margin-top: 20px;
+    text-align: center;
+}
+.caption a {
+    font-size: 15px;
+    color: #999;
+    text-decoration: none;
+
+}

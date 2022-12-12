@@ -4,30 +4,30 @@ import { useState } from 'react';
 
 import axios from 'axios';
 
-function Login() {
+function TeaLoM() {
     const [inputPW, setInputPw] = useState('');
     const [inputID, setInputID] = useState('');
     
     (function () {
         const login_id = (localStorage.getItem('login_id'));
         const ACcesstoken =(localStorage.getItem('access-token'));
-        axios.post('http://162.248.101.98:3001/api/student/acc', {
+        axios.post('http://162.248.101.98:3001/api/teacher/acc', {
                 login_id: login_id,
                 token: ACcesstoken
             }).then((res) => {
                 if(res.data == 'success'){
                     alert("이미 로그인 하셨어요!")
-                    window.location.href='/m/student'
+                    window.location.href='/m/teacher/mypage'
                 } else{
                     if(login_id != null){
-                        window.location.href='/m/acc'
+                        window.location.href='/m/teacher/acc'
                     }
                 }
             });
     })();
 
     const submitLogin = () => {
-        axios.post('http://162.248.101.98:3001/api/login/student', {
+        axios.post('http://162.248.101.98:3001/api/login/teacher', {
             inputID: inputID,
             inputPW: inputPW
         }).then((res) => {
@@ -37,7 +37,6 @@ function Login() {
                 alert("옳게 입력하셨네영!");
                 localStorage.setItem('login_id' , `${inputID}`);
                 localStorage.setItem('access-token' , `${res.data[0]}`);
-                localStorage.setItem('Class' , `${res.data[1]}`);
                 window.location.href = '/m/student';
             }
             
@@ -55,7 +54,7 @@ function Login() {
                             <img alt='logoimg' src="../img/jongrologo.png" className='w-32 items-center'></img>
                         </div>
                         <br></br>
-                        <div className='text-2xl font-semibold'>학생모드</div>
+                        <div className='text-2xl font-semibold'>선생님모드</div>
                         <div class='int-area1'>
                             <input type="Text" name="id" id="id"
                                 autoComplete='off' required onChange={(e) => { setInputID(e.target.value) }} />
@@ -79,4 +78,4 @@ function Login() {
     )
 }
 
-export default Login;
+export default TeaLoM;

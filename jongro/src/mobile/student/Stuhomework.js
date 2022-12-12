@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Header from "./Header";
 import axios from 'axios';
+import Navbar from "./Navbar";
 function Stuhomework() {
     (function() {
         const login_id = (localStorage.getItem('login_id'));
@@ -43,7 +44,7 @@ function Stuhomework() {
             <div className="w-full h-full p-4 pt-[70px]">
                 <div id='설문에 대한 설명' className="px-1 py-3 bg-gray-300 text-xs">
                     <div className="pb-1">
-                        *이 설문지는 학생별 숙제실태를 파악하는 <br /> 내용입니다.
+                        *이 설문지는 학생별 숙제실태를 파악하는 내용입니다.
                     </div>
                     *응답하신 내용이 거짓일시 불이익이 있을 수 있습니다.
                 </div>
@@ -76,6 +77,7 @@ function Stuhomework() {
                 </div>
 
             </div>
+            <Navbar/>
 
         </div>
     )

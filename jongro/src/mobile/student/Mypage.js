@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 
 function Mypage(){
     const login_id = (localStorage.getItem('login_id'));
+    const comment = (localStorage.getItem('comment'));
 
     return(
         <div>
@@ -26,7 +27,7 @@ function Mypage(){
                         {login_id}
                     </div>
                     <div>
-                        전교일등
+                        {comment}
                     </div>
                 </div>
             </div>

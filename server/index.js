@@ -50,7 +50,7 @@ app.post('/api/login/student', (req, res) => {
                 login_id = result[0].login_id
                 password = result[0].password
                 Name = result[0].Name
-
+                Class = result[0].class
                 var pass = crypto.createHash('sha512').update(`${password}`).digest('base64');
 
                 let data = {
@@ -61,6 +61,7 @@ app.post('/api/login/student', (req, res) => {
                 var token = jwt.sign(data, jwtSecretKey, { expiresIn: '5days' });
 
                 res.send(token)
+                res.send(Class)
                 console.log(pass)
                 console.log(token)
                 console.log(`<br/>`)

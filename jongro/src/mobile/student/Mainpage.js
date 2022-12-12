@@ -34,6 +34,7 @@ function Mainpage() {
 
     })();
     const login_id = (localStorage.getItem('login_id'));
+    const Class = (localStorage.getItem('Class'));
     return (
         <div className="h-screen">
             <div alt="header" className="flex h-10 flex-col fixed w-full">
@@ -44,7 +45,7 @@ function Mainpage() {
                 </div>
             </div>
             <div alt="content" className="px-1 pt-28">
-                <a alt="숙제 자가진단" className="flex text-sm justify-between px-1 bg-blue-800 text-white rounded-lg h-20 pt-2 flex-col hover:bg-blue-900" href="/m/student/homework">
+                <a alt="숙제 자가진단" className="flex text-sm justify-between px-1 bg-blue-900 text-white rounded-lg h-20 pt-2 flex-col hover:animate-pulse" href="/m/student/homework">
                     <div className="flex justify-between">
                         <div>숙제자가진단</div>
                         <div className="flex flex-col">
@@ -52,7 +53,7 @@ function Mainpage() {
                         </div>
                     </div>
                     <div className="flex justify-between pr-24">
-                        <div>{login_id} ㅣ{localStorage.getItem('class')}</div>
+                        <div>{login_id} ㅣ{localStorage.getItem('Class')}</div>
                     </div>
                 </a>
             </div>
