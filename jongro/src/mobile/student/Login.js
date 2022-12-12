@@ -72,8 +72,11 @@ function Login() {
                             <button onClick={submitLogin}>Go</button>
                         </div>
                     </div>
-
                 </div>
+            </div>
+            <div className='fixed bottom-0 text-white flex justify-between w-full px-20 py-5 text-2xl'>
+                <div>선생님</div>
+                <div>학부모</div>
             </div>
         </div>
     )

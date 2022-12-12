@@ -3,6 +3,7 @@ import Nav from "./Nav";
 import axios from 'axios';
 import { useState } from "react";
 import Navbar from "./Navbar";
+import { Route, Link } from 'react-router-dom';
 function Mainpage() {
 
     (function () {
@@ -45,7 +46,7 @@ function Mainpage() {
                 </div>
             </div>
             <div alt="content" className="px-1 pt-28">
-                <a alt="숙제 자가진단" className="flex text-sm justify-between px-1 bg-blue-900 text-white rounded-lg h-20 pt-2 flex-col hover:animate-pulse" href="/m/student/homework">
+                <Link alt="숙제 자가진단" className="flex text-sm justify-between px-1 bg-blue-900 text-white rounded-lg h-20 pt-2 flex-col hover:animate-pulse" to = "/m/student/homework">
                     <div className="flex justify-between">
                         <div>숙제자가진단</div>
                         <div className="flex flex-col">
@@ -55,7 +56,7 @@ function Mainpage() {
                     <div className="flex justify-between pr-24">
                         <div>{login_id} ㅣ{localStorage.getItem('Class')}</div>
                     </div>
-                </a>
+                </Link>
             </div>
             <Navbar/>
         </div>
