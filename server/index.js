@@ -323,14 +323,15 @@ app.post('/api/admin/homework', (res) => {
 
     const did = `${month}/${day}`
     var sqlin3 = `SELECT * FROM jongrosky.homework;`
-    var sqlin2 = `SELECT * FROM (homework) WHERE (\`${did}\` is not null);`
     database.query(sqlin3, (err, result) => {
         console.log(result)
+        console.log(typeof(result))
     })
 
 });
 
 const schedule = require('node-schedule');
+const { type } = require('os');
 
 app.listen(PORT, () => {
     const offset = 1000 * 60 * 60 * 9
@@ -350,7 +351,7 @@ app.listen(PORT, () => {
 
     const dat = '0 0 0 * 1-5';
 
-    schedule.scheduleJob(dat, function () {
+    schedule.scheduleJob('0 0 0 * 1-5', function () {
         database.query(sql, (err, result) => {
             if (err) { console.log(err) }
             else {
@@ -360,7 +361,4 @@ app.listen(PORT, () => {
         })
     });
     console.log(`Server is running on port: ${PORT}`);
-    var inputPw = crypto.createHash('sha512').update('1001haha*').digest('base64');
-
-    console.log(inputPw)
 });

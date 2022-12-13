@@ -15,7 +15,7 @@ function Mainpage() {
         }).then((res) => {
             if (res.data == null) {
                 alert("로그인 하지 않으셨어요!")
-                window.location.href = '/m/teacher'
+                window.location.href = '/m'
             }
         });
         axios.post('http://162.248.101.98:3001/api/admin/homework').then((res)=>{
