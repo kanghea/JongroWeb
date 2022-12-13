@@ -22,9 +22,9 @@ import Mainpage from './mobile/student/Mainpage';
 import Login from './mobile/student/Login';
 import Stuhomework from './mobile/student/Stuhomework';
 import Mypage from './mobile/student/Mypage';
-import TeaLoM from './mobile/teacher/TeaLoM';
 
-import TeaMainpage from './mobile/teacher/TeaMainpage';
+import AdLoM from './mobile/admin/AdLoM';
+import AdMainpage from './mobile/admin/AdMainpage';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -48,12 +48,13 @@ root.render(
         <Route path="*" element={<Err/>} />
 
         <Route path="/m" element={<Login/>} />
-        <Route path="/m/teacher" element={<TeaLoM/>} />
-        <Route path="/m/teacher/mypage" element={<TeaMainpage/>} />
         <Route path="/m/acc" element={<LoginM/>} />
         <Route path="/m/student" element={<Mainpage/>}/>
         <Route path="/m/student/homework" element={<Stuhomework/>}/>
         <Route path="/m/student/mypage" element={<Mypage/>}/>
+
+        <Route path="/m/admin" element={<AdLoM/>}/>
+        <Route path="/m/admin/mainpage" element={<AdMainpage/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

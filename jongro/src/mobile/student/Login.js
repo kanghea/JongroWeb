@@ -76,7 +76,8 @@ function Login() {
                 </div>
             </div>
             <div className='fixed bottom-0 text-white flex justify-between w-full px-20 py-5 text-xl font-medium'>
-                <Link to='/m/parents'>학부모</Link>
+                <Link onClick={()=>{alert("아직 구현되지 않았어요!")
+                    window.location.href='/m'}}>학부모</Link>
                 <Link to='/m/admin'>관리자</Link>
             </div>
         </div>

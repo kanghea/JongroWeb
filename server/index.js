@@ -177,6 +177,27 @@ app.post("/api/teacher/acc", (req, res) => {
         return res.send("error");
     }
 });
+app.post("/api/admin/acc", (req, res) => {
+    // Tokens are generally passed in the header of the request
+    // Due to security reasons. 
+    let jwtSecretKey = process.env.ADMJWT_SECRET_KEY;
+    const inputId = req.body.inputID;
+    var token = req.body.token;
+    console.log(token)
+    console.log(inputId)
+    try {
+        const verified = jwt.verify(token, jwtSecretKey);
+        if (verified) {
+            return res.send("success");
+        } else {
+            // Access Denied
+            return res.send("error");
+        }
+    } catch (error) {
+        // Access Denied
+        return res.send("error");
+    }
+});
 app.post('/api/student/homework', (req, res) => {
     const wh = req.body.wh;
     var what = req.body.what;
@@ -298,7 +319,7 @@ app.listen(PORT, () => {
     const sql = `ALTER TABLE jongrosky.homework ADD COLUMN \`${did}\` TEXT NULL`
     const sql2 = `ALTER TABLE jongrosky.cheak ADD COLUMN \`${did}\` TEXT NULL`
 
-    const dat = '0 1 ? * 0-6';
+    const dat = '0 0 0 * 1-5';
 
     schedule.scheduleJob(dat, function () {
         database.query(sql, (err, result) => {

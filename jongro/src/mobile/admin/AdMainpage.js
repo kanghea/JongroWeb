@@ -32,14 +32,7 @@ function Mainpage() {
                 </div>
             </div>
             <div alt="content" className="px-1 pt-28">
-                <Link alt="숙제 자가진단" className="flex text-sm justify-between px-1 bg-blue-900 text-white rounded-lg h-20 pt-2 flex-col hover:animate-pulse" to = "/m/student/homework">
-                    <div className="flex justify-between">
-                        <div>숙제자가진단</div>
-                    </div>
-                    <div className="flex justify-between pr-24">
-                        <div>{login_id}</div>
-                    </div>
-                </Link>
+                <div></div>
             </div>
         </div>
     )

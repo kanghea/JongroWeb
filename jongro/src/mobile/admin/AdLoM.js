@@ -1,7 +1,7 @@
 import './mainm.css';
 
 import { useState } from 'react';
-
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function TeaLoM() {
@@ -11,7 +11,7 @@ function TeaLoM() {
     (function () {
         const login_id = (localStorage.getItem('login_id'));
         const ACcesstoken =(localStorage.getItem('access-token'));
-        axios.post('http://162.248.101.98:3001/api/teacher/acc', {
+        axios.post('http://162.248.101.98:3001/api/admin/acc', {
                 login_id: login_id,
                 token: ACcesstoken
             }).then((res) => {
@@ -27,7 +27,7 @@ function TeaLoM() {
     })();
 
     const submitLogin = () => {
-        axios.post('http://162.248.101.98:3001/api/login/teacher', {
+        axios.post('http://162.248.101.98:3001/api/login/admin', {
             inputID: inputID,
             inputPW: inputPW
         }).then((res) => {
@@ -54,7 +54,7 @@ function TeaLoM() {
                             <img alt='logoimg' src="../img/jongrologo.png" className='w-32 items-center'></img>
                         </div>
                         <br></br>
-                        <div className='text-2xl font-semibold'>선생님모드</div>
+                        <div className='text-2xl font-semibold'>관리자모드</div>
                         <div class='int-area1'>
                             <input type="Text" name="id" id="id"
                                 autoComplete='off' required onChange={(e) => { setInputID(e.target.value) }} />
@@ -73,6 +73,11 @@ function TeaLoM() {
                     </div>
 
                 </div>
+            </div>
+            <div className='fixed bottom-0 text-white flex justify-between w-full px-20 py-5 text-xl font-medium'>
+                <Link to='/m'>학생</Link>
+                <Link onClick={()=>{alert("아직 구현되지 않았어요!")
+                                    window.location.href='/m'}}>학부모</Link>
             </div>
         </div>
     )
