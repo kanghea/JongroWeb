@@ -12,7 +12,18 @@ import { Chart } from "chart.js";
 function Mypage(){
     const login_id = (localStorage.getItem('login_id'));
     const comment = (localStorage.getItem('comment'));
-
+    (function () {
+        const login_id = (localStorage.getItem('login_id'));
+        const ACcesstoken = (localStorage.getItem('access-token'));
+        axios.post('http://162.248.101.98:3001/api/student/acc', {
+            login_id: login_id,
+            token: ACcesstoken
+        }).then((res) => {
+            if (res.data == null) {
+                alert("로그인 하지 않으셨어요!")
+                window.location.href = '/m'
+            }
+        });})()
     return(
         <div>
             <Mypageheader/>
@@ -26,8 +37,22 @@ function Mypage(){
                                 {login_id}
                             </div>
                             <div className="w-full border-2 flex justify-center py-1" onClick={()=>{
-                                prompt("소개")
-                                axios.post('http://162.248.101.98:3001/api/login/student')
+                                 var comment = prompt(`${login_id}님의 소개를 입력해주세요!`, "");
+                                 console.log(comment)
+                                 if(comment == null){
+                                    window.location.href = '/m/student/mypage'
+                                 } else {
+                                    axios.post('http://162.248.101.98:3001/api/comment/student', {
+                                        login_id: login_id,
+                                        comment: comment
+                                    }).then(() => {
+                                        window.localStorage.setItem('comment', comment);
+                                        window.location.href = '/m/student/mypage'
+                                    }).catch(()=>{
+                                        window.localStorage.setItem('comment', comment);
+                                        window.location.href = '/m/student/mypage'
+                                    });
+                                 }
                               }}>
                                 프로필 편집
                             </div>

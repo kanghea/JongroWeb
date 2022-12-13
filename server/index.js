@@ -134,6 +134,20 @@ app.post('/api/teacher/student', (req, res) => {
         }
     })
 });
+app.post('/api/comment/student', (req, res) => {
+    const Name = req.body.login_id;
+    const comment = req.body.comment;
+
+    const sql = `UPDATE jongrosky.student SET comment = '${comment}' WHERE (Name = '${Name}');`
+    database.query(sql, (err, result) => {
+        if (err) {
+            console.log(err)
+            res.send("err");
+        } else if (result) {
+            res.send("success");
+        }
+    })
+});
 app.post("/api/student/acc", (req, res) => {
 
     let jwtSecretKey = process.env.STUJWT_SECRET_KEY;
@@ -199,27 +213,6 @@ app.post("/api/admin/acc", (req, res) => {
         return res.send("error");
     }
 });
-app.post("/api/admin/acc", (req, res) => {
-    // Tokens are generally passed in the header of the request
-    // Due to security reasons. 
-    let jwtSecretKey = process.env.ADMJWT_SECRET_KEY;
-    const inputId = req.body.inputID;
-    var token = req.body.token;
-    console.log(token)
-    console.log(inputId)
-    try {
-        const verified = jwt.verify(token, jwtSecretKey);
-        if (verified) {
-            return res.send("success");
-        } else {
-            // Access Denied
-            return res.send("error");
-        }
-    } catch (error) {
-        // Access Denied
-        return res.send("error");
-    }
-});
 app.post('/api/student/homework', (req, res) => {
     const wh = req.body.wh;
     var what = req.body.what;
@@ -235,7 +228,7 @@ app.post('/api/student/homework', (req, res) => {
 
     if (wh == 1) {
         console.log(did)
-        var sqlin2 = `UPDATE jongrosky.homework SET \`${did}\` = '1' WHERE (name = '${login_id}');`;
+        var sqlin2 = `UPDATE jongrosky.homework SET \`${did}\` = '완료' WHERE (name = '${login_id}');`;
         database.query(sqlin2, (err, result) => {
             if (err) {
                 console.log(err)
@@ -331,13 +324,8 @@ app.post('/api/admin/homework', (res) => {
     const did = `${month}/${day}`
     var sqlin3 = `SELECT * FROM jongrosky.homework;`
     var sqlin2 = `SELECT * FROM (homework) WHERE (\`${did}\` is not null);`
-    database.query(sqlin2, (err, result) => {
-        console.log(result[0])
-        if(result[0] == null){
-            res.send("no")
-        } else{
-            res.send("success")
-        }
+    database.query(sqlin3, (err, result) => {
+        console.log(result)
     })
 
 });

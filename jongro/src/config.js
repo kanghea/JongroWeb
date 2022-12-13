@@ -1,5 +1,5 @@
 import axios from "axios"
 
 export const axiosInstance = axios.create({
-    baseURL: "https://jongro.herokuapp.com/api/"
+    baseURL: "http://162.248.101.98:3001"
 })
