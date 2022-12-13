@@ -186,6 +186,28 @@ app.post("/api/admin/acc", (req, res) => {
     console.log(token)
     console.log(inputId)
     try {
+
+        const verified = jwt.verify(token, jwtSecretKey);
+        if (verified) {
+            return res.send("success");
+        } else {
+            // Access Denied
+            return res.send("error");
+        }
+    } catch (error) {
+        // Access Denied
+        return res.send("error");
+    }
+});
+app.post("/api/admin/acc", (req, res) => {
+    // Tokens are generally passed in the header of the request
+    // Due to security reasons. 
+    let jwtSecretKey = process.env.ADMJWT_SECRET_KEY;
+    const inputId = req.body.inputID;
+    var token = req.body.token;
+    console.log(token)
+    console.log(inputId)
+    try {
         const verified = jwt.verify(token, jwtSecretKey);
         if (verified) {
             return res.send("success");

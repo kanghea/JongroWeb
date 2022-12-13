@@ -2,6 +2,8 @@ import Mypageheader from "./MypageHeader";
 import Navbar from "./Navbar";
 
 import { Radar } from 'react-chartjs-2';
+import axios from "axios";
+import { RadarChart } from "./radar/RadaChart";
 
 function Mypage(){
     const login_id = (localStorage.getItem('login_id'));
@@ -42,7 +44,10 @@ function Mypage(){
                             <div className="text-3xl font-sans pb-2">
                                 {login_id}
                             </div>
-                            <div className="w-full border-2 flex justify-center py-1">
+                            <div className="w-full border-2 flex justify-center py-1" onClick={()=>{
+                                prompt("소개")
+                                axios.post('http://162.248.101.98:3001/api/login/student')
+                              }}>
                                 프로필 편집
                             </div>
                         </div>
@@ -55,6 +60,7 @@ function Mypage(){
                         {comment}
                     </div>
                 </div>
+                <RadarChart />
             </div>
             <Navbar/>
         </div>

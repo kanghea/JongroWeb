@@ -9,7 +9,7 @@ function Mainpage() {
     (function () {
         const login_id = (localStorage.getItem('login_id'));
         const ACcesstoken = (localStorage.getItem('access-token'));
-        axios.post('http://162.248.101.98:3001/api/teacher/acc', {
+        axios.post('http://162.248.101.98:3001/api/admin/acc', {
             login_id: login_id,
             token: ACcesstoken
         }).then((res) => {
@@ -18,6 +18,10 @@ function Mainpage() {
                 window.location.href = '/m/teacher'
             }
         });
+        axios.post('http://162.248.101.98:3001/api/admin/homework').then((res)=>{
+                
+            }
+        )
 
     })();
     const login_id = (localStorage.getItem('login_id'));
