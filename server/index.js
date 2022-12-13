@@ -322,6 +322,25 @@ app.post('/api/student/homework/acc', (req, res) => {
     })
 
 });
+app.post('/api/admin/homework', (res) => {
+    const date = new Date();
+
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    const did = `${month}/${day}`
+    var sqlin3 = `SELECT * FROM jongrosky.homework;`
+    var sqlin2 = `SELECT * FROM (homework) WHERE (\`${did}\` is not null);`
+    database.query(sqlin2, (err, result) => {
+        console.log(result[0])
+        if(result[0] == null){
+            res.send("no")
+        } else{
+            res.send("success")
+        }
+    })
+
+});
 
 const schedule = require('node-schedule');
 

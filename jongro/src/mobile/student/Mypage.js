@@ -1,37 +1,18 @@
 import Mypageheader from "./MypageHeader";
 import Navbar from "./Navbar";
 
-import { Radar } from 'react-chartjs-2';
 import axios from "axios";
 import { RadarChart } from "./radar/RadaChart";
+import { RadarData, RadarOptions } from "./radar/RadarConfig";
+import { Radar } from "react-chartjs-2";
+import { Chart } from "chart.js";
+
+
 
 function Mypage(){
     const login_id = (localStorage.getItem('login_id'));
     const comment = (localStorage.getItem('comment'));
-    const data3 = {
-        labels: ['Thing 1', 'Thing 2', 'Thing 3', 'Thing 4', 'Thing 5', 'Thing 6'],
-        datasets: [
-          {
-            label: '# of Votes',
-            data: [2, 9, 3, 5, 2, 3],
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1,
-          },
-        ],
-      };
-      const config = {
-        type: 'radar',
-        data: data3,
-        options: {
-          elements: {
-            line: {
-              borderWidth: 3
-            }
-          }
-        },
-      };
-      
+
     return(
         <div>
             <Mypageheader/>
@@ -60,7 +41,7 @@ function Mypage(){
                         {comment}
                     </div>
                 </div>
-                <RadarChart />
+            
             </div>
             <Navbar/>
         </div>

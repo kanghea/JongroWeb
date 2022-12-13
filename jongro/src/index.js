@@ -25,6 +25,7 @@ import Mypage from './mobile/student/Mypage';
 
 import AdLoM from './mobile/admin/AdLoM';
 import AdMainpage from './mobile/admin/AdMainpage';
+import { RadarChart } from './mobile/student/radar/RadaChart';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -55,6 +56,7 @@ root.render(
 
         <Route path="/m/admin" element={<AdLoM/>}/>
         <Route path="/m/admin/mainpage" element={<AdMainpage/>}/>
+        
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
