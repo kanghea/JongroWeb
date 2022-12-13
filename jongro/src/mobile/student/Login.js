@@ -20,7 +20,9 @@ function Login() {
                     alert("이미 로그인 하셨어요!")
                     window.location.href='/m/student'
                 } else{
-                    if(login_id != null){
+                    if(login_id == '류현아'){
+                        
+                    }else if(login_id != null){
                         window.location.href='/m/acc'
                     }
                 }

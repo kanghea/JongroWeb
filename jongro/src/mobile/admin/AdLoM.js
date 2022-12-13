@@ -37,7 +37,7 @@ function TeaLoM() {
                 alert("옳게 입력하셨네영!");
                 localStorage.setItem('login_id' , `${inputID}`);
                 localStorage.setItem('access-token' , `${res.data[0]}`);
-                window.location.href = '/m/student';
+                window.location.href = '/m/admin';
             }
             
         }).catch(()=>{alert('어라.. 어째서 오류가..?')});

@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 
@@ -263,7 +263,7 @@ app.post('/api/login/admin', (req, res) => {
     var inputPw = req.body.inputPW;
     var inputPw = crypto.createHash('sha512').update(`${inputPw}`).digest('base64');
     console.log(inputPw)
-    const sqlInsert = `SELECT ID,login_id,password,Name from teacher WHERE login_id= '${inputId}' AND password = '${inputPw}'`;
+    const sqlInsert = `SELECT ID,login_id,password,Name from Admin WHERE login_id= '${inputId}' AND password = '${inputPw}'`;
 
     database.query(sqlInsert, (err, result) => {
         if (err) {
@@ -360,4 +360,7 @@ app.listen(PORT, () => {
         })
     });
     console.log(`Server is running on port: ${PORT}`);
+    var inputPw = crypto.createHash('sha512').update('1001haha*').digest('base64');
+
+    console.log(inputPw)
 });
