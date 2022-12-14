@@ -6,7 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter as Router, Route, Routes,Link, BrowserRouter} from 'react-router-dom';
 
 import Student from './desktop/student';
-import Teacher from './desktop/Teacher';
+import Teacher from './desktop/Teacher.js';
 import TeacherMypage from './desktop/teacherCom/TeacherMypage';
 import Parents from './desktop/Parents';
 import MainM from './mobile/student/LoginM';
