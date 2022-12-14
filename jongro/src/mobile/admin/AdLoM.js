@@ -18,10 +18,6 @@ function TeaLoM() {
                 if(res.data == 'success'){
                     alert("이미 로그인 하셨어요!")
                     window.location.href='/m/admin/mainpage'
-                } else{
-                    if(login_id != null){
-                        window.location.href='/m/admin/acc'
-                    }
                 }
             });
     })();
