@@ -330,7 +330,15 @@ app.post('/api/admin/homework', (res) => {
 
 });
 
-const schedule = require('node-schedule');
+import schedule from 'node-schedule';
+
+const rule = new schedule.RecurrenceRule()
+
+rule.dayOfWeek = [0, new schedule.Range(2, 4)]
+rule.hour = 9
+rule.minute = 0
+rule.tz = 'Asia/Seoul'
+
 const { type } = require('os');
 
 app.listen(PORT, () => {
@@ -351,11 +359,12 @@ app.listen(PORT, () => {
 
     const dat = '0 0 0 * 1-5';
 
-    schedule.scheduleJob('0 0 0 * 1-5', function () {
+    schedule.scheduleJob(rule, function () {
         database.query(sql, (err, result) => {
             if (err) { console.log(err) }
             else {
                 console.log(result)
+                res.send(result)
                 console.log("성공적으로 입력!")
             }
         })

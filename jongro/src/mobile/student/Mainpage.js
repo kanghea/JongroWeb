@@ -26,7 +26,7 @@ function Mainpage() {
             } else {
                 window.localStorage.setItem('homework', '미완료');
             }
-        }).catch(window.localStorage.setItem('homework', '미완료'));
+        })
 
     })();
     const login_id = (localStorage.getItem('login_id'));
