@@ -330,8 +330,7 @@ app.post('/api/admin/homework', (res) => {
 
 });
 
-import schedule from 'node-schedule';
-
+const schedule = require('node-schedule');
 const rule = new schedule.RecurrenceRule()
 
 rule.dayOfWeek = [0, new schedule.Range(2, 4)]
