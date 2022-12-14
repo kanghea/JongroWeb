@@ -322,10 +322,11 @@ app.post('/api/admin/homework', (res) => {
     const day = date.getDate();
 
     const did = `${month}/${day}`
-    var sqlin3 = `SELECT * FROM jongrosky.homework;`
+    var sqlin3 = `SELECT Name,\`${did}\` FROM homework`
     database.query(sqlin3, (err, result) => {
         console.log(result)
         console.log(typeof(result))
+        res.send(result)
     })
 
 });
