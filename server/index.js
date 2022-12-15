@@ -89,9 +89,9 @@ app.post('/api/login/student/Class', (req, res) => {
                 login_id = result[0].login_id
                 password = result[0].password
                 Name = result[0].Name
-                Class = result[0].class
-
-                res.send(Class)
+                Classs = result[0].classs
+                console.log(Classs)
+                res.send(Classs)
 
             }
         }
@@ -317,7 +317,7 @@ app.post('/api/login/admin', (req, res) => {
                 let data = {
                     password: pass
                 }
-                
+
                 const jwtSecretKey = process.env.ADMJWT_SECRET_KEY;
 
                 var token = jwt.sign(data, jwtSecretKey, { expiresIn: '5days' });
@@ -361,8 +361,11 @@ app.post('/api/admin/homework', (req, res) => {
     database.query(sqlin3, (err, result) => {
         console.log(result);
         console.log(typeof (result));
+        
+        sult = result.toString()
+        console.log(typeof(sult))
 
-        res.send(result.toString());
+        res.send(sult);
     })
 });
 
