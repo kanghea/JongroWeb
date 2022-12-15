@@ -13,7 +13,7 @@ const database = mysql.createPool({
     user: 'admin',
     password: process.env.password,
     database: 'jongrosky',
-    port:'3306'
+    port: '3306'
 });
 
 app.use(express.json());
@@ -244,7 +244,7 @@ app.post('/api/student/homework', (req, res) => {
         database.query(sqlin2, (result) => {
             if (result == null) {
                 var sqlin2 = `UPDATE jongrosky.homework SET \`${did}\` = '${what}' WHERE (name = '${login_id}');`
-                database.query(sqlin2,(result)=>{
+                database.query(sqlin2, (result) => {
                     console.log(result);
                     res.send("success")
                 })
@@ -287,7 +287,7 @@ app.post('/api/login/admin', (req, res) => {
 
                 var token = jwt.sign(data, jwtSecretKey, { expiresIn: '5days' });
 
-                res.send(200, `${token}`)
+                res.send(200, token)
                 console.log(token)
             }
         }
@@ -307,9 +307,9 @@ app.post('/api/student/homework/acc', (req, res) => {
     var sqlin2 = `SELECT * FROM (homework) WHERE (name = '${login_id}') and (\`${did}\` is not null);`
     database.query(sqlin2, (err, result) => {
         console.log(result[0])
-        if(result[0] == null){
+        if (result[0] == null) {
             res.send("no")
-        } else{
+        } else {
             res.send("success")
         }
     })
@@ -324,24 +324,25 @@ app.post('/api/admin/homework', (req, res) => {
     const did = `${month}/${day}`
     var sqlin3 = `SELECT Name,\`${did}\` FROM homework`
     database.query(sqlin3, (err, result) => {
-        console.log(result)
-        console.log(typeof(result))
-        res.send(result)
+        console.log(result);
+        console.log(typeof (result));
+
+        res.send(result.toString());
     })
 
 });
-
-const schedule = require('node-schedule');
-const rule = new schedule.RecurrenceRule()
-
-rule.dayOfWeek = [0, new schedule.Range(2, 4)]
-rule.hour = 9
-rule.minute = 0
-rule.tz = 'Asia/Seoul'
-
 const { type } = require('os');
+const { stringify } = require('querystring');
 
 app.listen(PORT, () => {
+    const schedule = require('node-schedule');
+    const rule = new schedule.RecurrenceRule()
+
+    rule.dayOfWeek = [0, new schedule.Range(2, 4)]
+    rule.hour = 9
+    rule.minute = 0
+    rule.tz = 'Asia/Seoul'
+
     const offset = 1000 * 60 * 60 * 9
     const koreaNow = new Date((new Date()).getTime() + offset)
     console.log(koreaNow)
@@ -357,7 +358,7 @@ app.listen(PORT, () => {
     const sql = `ALTER TABLE jongrosky.homework ADD COLUMN \`${did}\` TEXT NULL`
     const sql2 = `ALTER TABLE jongrosky.cheak ADD COLUMN \`${did}\` TEXT NULL`
 
-    const dat = '0 0 0 * 1-5';
+    const dat = '0 0 0 * 1-6';
 
     schedule.scheduleJob(rule, function () {
         database.query(sql, (err, result) => {
