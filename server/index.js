@@ -396,7 +396,7 @@ app.post('/api/admin/homework', (req, res) => {
         sult = result.toString()
         console.log(typeof(sult))
 
-        res.send(sult);
+        res.send(200, sult);
     })
 });
 
