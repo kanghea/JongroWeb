@@ -8,19 +8,19 @@ import { Link } from 'react-router-dom';
 function Login() {
     const [inputPW, setInputPw] = useState('');
     const [inputID, setInputID] = useState('');
-    
+
     (function () {
         const login_id = (localStorage.getItem('login_id'));
-        const ACcesstoken =(localStorage.getItem('access-token'));
+        const ACcesstoken = (localStorage.getItem('access-token'));
         axios.post('http://162.248.101.98:3001/api/student/acc', {
-                login_id: login_id,
-                token: ACcesstoken
-            }).then((res) => {
-                if(res.data == 'success'){
-                    alert("이미 로그인 하셨어요!")
-                    window.location.href='/m/student'
-                }
-            });
+            login_id: login_id,
+            token: ACcesstoken
+        }).then((res) => {
+            if (res.data == 'success') {
+                alert("이미 로그인 하셨어요!")
+                window.location.href = '/m/student'
+            }
+        });
     })();
 
     const submitLogin = () => {
@@ -28,27 +28,55 @@ function Login() {
             inputID: inputID,
             inputPW: inputPW
         }).then((res) => {
-            if(res.data == "error"){
+            if (res.data == "error") {
                 alert("옳지 않아요!!");
-            }else{
-                localStorage.setItem('login_id' , `${inputID}`);
-                localStorage.setItem('access-token' , `${res.data}`);
+            } else {
+                localStorage.setItem('login_id', `${inputID}`);
+                localStorage.setItem('access-token', `${res.data}`);
                 axios.post('http://162.248.101.98:3001/api/login/student/Class', {
                     inputID: inputID,
                     inputPW: inputPW
                 }).then((res) => {
-                    if(res.data == "error"){
+                    if (res.data == "error") {
                         alert("옳지 않아요!!");
-                    }else{
-                        alert("옳게 입력하셨네영!");
-                        localStorage.setItem('Class' , `${res.data}`);
-                        window.location.href = '/m/student';
+                    } else {
+                        localStorage.setItem('Class', `${res.data}`);
+                        axios.post('http://162.248.101.98:3001/api/login/student/comment', {
+                            inputID: inputID,
+                            inputPW: inputPW
+                        }).then((res) => {
+                            if (res.data == "error") {
+                                alert("옳지 않아요!!");
+                            } else {
+                                if(res.data == "error"){
+                                    var comment = prompt(`${login_id}님의 소개를 입력해주세요!`, "");
+                                    console.log(comment)
+                                    if(comment == null){
+                                        window.location.href = '/m/student/mypage'
+                                    } else {
+                                        axios.post('http://162.248.101.98:3001/api/comment/student', {
+                                            login_id: login_id,
+                                            comment: comment
+                                        }).then(() => {
+                                            window.localStorage.setItem('comment', comment);
+                                            window.location.href = '/m/student'
+                                        }).catch(()=>{
+                                            window.localStorage.setItem('comment', comment);
+                                            window.location.href = '/m/student'
+                                        });
+                                    }
+                                    }
+                                alert("옳게 입력하셨습니다");
+                                localStorage.setItem('comment', `${res.data}`);
+                                window.location.href = '/m/student';
+                            }
+                        });
                     }
                 });
             }
-            
+
         });
-        
+
 
     };
     return (
@@ -81,8 +109,10 @@ function Login() {
                 </div>
             </div>
             <div className='fixed bottom-0 text-white flex justify-between w-full px-20 py-5 text-xl font-medium'>
-                <Link onClick={()=>{alert("아직 구현되지 않았어요!")
-                    window.location.href='/m'}}>학부모</Link>
+                <Link onClick={() => {
+                    alert("아직 구현되지 않았어요!")
+                    window.location.href = '/m'
+                }}>학부모</Link>
                 <Link to='/m/admin'>관리자</Link>
             </div>
         </div>

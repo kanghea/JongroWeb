@@ -75,7 +75,7 @@ app.post('/api/login/student/Class', (req, res) => {
     var inputPw = req.body.inputPW;
     var inputPw = crypto.createHash('sha512').update(`${inputPw}`).digest('base64');
     console.log(inputPw)
-    const sqlInsert = `SELECT ID,login_id,password,Name from student WHERE login_id= '${inputId}' AND password = '${inputPw}'`;
+    const sqlInsert = `SELECT ID,login_id,password,Name,classs from student WHERE login_id= '${inputId}' AND password = '${inputPw}'`;
 
     database.query(sqlInsert, (err, result) => {
         if (err) {
@@ -93,6 +93,37 @@ app.post('/api/login/student/Class', (req, res) => {
                 console.log(Classs)
                 res.send(Classs)
 
+            }
+        }
+    })
+});
+
+app.post('/api/login/student/comment', (req, res) => {
+    const inputId = req.body.inputID;
+    var inputPw = req.body.inputPW;
+    var inputPw = crypto.createHash('sha512').update(`${inputPw}`).digest('base64');
+    console.log(inputPw)
+    const sqlInsert = `SELECT ID,login_id,password,Name,classs,comment from student WHERE login_id= '${inputId}' AND password = '${inputPw}'`;
+
+    database.query(sqlInsert, (err, result) => {
+        if (err) {
+            console.log(`${err}는 이거`);
+        } else if (result) {
+            if (result[0] == null) {
+                console.log("아니다");
+                res.send(200, "error");
+            } else {
+                ID = result[0].ID
+                login_id = result[0].login_id
+                password = result[0].password
+                Name = result[0].Name
+                Classs = result[0].classs
+                comment = result[0].comment
+                if(comment == null){
+                    res.send("error")
+                } else{
+                    res.send(comment)
+                }
             }
         }
     })
