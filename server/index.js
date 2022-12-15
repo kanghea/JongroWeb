@@ -90,19 +90,8 @@ app.post('/api/login/student/Class', (req, res) => {
                 password = result[0].password
                 Name = result[0].Name
                 Class = result[0].class
-                var pass = crypto.createHash('sha512').update(`${password}`).digest('base64');
-
-                let data = {
-                    password: pass
-                }
-                const jwtSecretKey = process.env.STUJWT_SECRET_KEY;
-
-                var token = jwt.sign(data, jwtSecretKey, { expiresIn: '5days' });
 
                 res.send(Class)
-                console.log(pass)
-                console.log(token)
-                console.log(`<br/>`)
 
             }
         }
@@ -303,6 +292,7 @@ app.post('/api/student/homework', (req, res) => {
 });
 
 app.post('/api/login/admin', (req, res) => {
+
     const inputId = req.body.inputID;
     var inputPw = req.body.inputPW;
     var inputPw = crypto.createHash('sha512').update(`${inputPw}`).digest('base64');
@@ -327,6 +317,7 @@ app.post('/api/login/admin', (req, res) => {
                 let data = {
                     password: pass
                 }
+                
                 const jwtSecretKey = process.env.ADMJWT_SECRET_KEY;
 
                 var token = jwt.sign(data, jwtSecretKey, { expiresIn: '5days' });

@@ -34,20 +34,19 @@ function Login() {
                 alert("옳게 입력하셨네영!");
                 localStorage.setItem('login_id' , `${inputID}`);
                 localStorage.setItem('access-token' , `${res.data}`);
-            }
-            
-        });
-        axios.post('http://162.248.101.98:3001/api/login/student/Class', {
-            inputID: inputID,
-            inputPW: inputPW
-        }).then((res) => {
-            if(res.data == "error"){
-                alert("옳지 않아요!!");
-            }else{
-                alert("옳게 입력하셨네영!");
-                localStorage.setItem('login_id' , `${inputID}`);
-                localStorage.setItem('Class' , `${res.data}`);
-                window.location.href = '/m/student';
+                axios.post('http://162.248.101.98:3001/api/login/student/Class', {
+                    inputID: inputID,
+                    inputPW: inputPW
+                }).then((res) => {
+                    if(res.data == "error"){
+                        alert("옳지 않아요!!");
+                    }else{
+                        alert("옳게 입력하셨네영!");
+                        localStorage.setItem('login_id' , `${inputID}`);
+                        localStorage.setItem('Class' , `${res.data}`);
+                        window.location.href = '/m/student';
+                    }
+                });
             }
             
         });
