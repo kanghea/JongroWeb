@@ -287,7 +287,7 @@ app.post('/api/login/admin', (req, res) => {
 
                 var token = jwt.sign(data, jwtSecretKey, { expiresIn: '5days' });
 
-                res.send(200, token)
+                res.send(200, `${token}`)
                 console.log(token)
             }
         }
@@ -315,7 +315,7 @@ app.post('/api/student/homework/acc', (req, res) => {
     })
 
 });
-app.post('/api/admin/homework', (res) => {
+app.post('/api/admin/homework', (req, res) => {
     const date = new Date();
 
     const month = date.getMonth() + 1;
