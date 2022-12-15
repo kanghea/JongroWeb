@@ -172,6 +172,7 @@ app.post('/api/teacher/student', (req, res) => {
         }
     })
 });
+
 app.post('/api/comment/student', (req, res) => {
     const Name = req.body.login_id;
     const comment = req.body.comment;
@@ -186,6 +187,7 @@ app.post('/api/comment/student', (req, res) => {
         }
     })
 });
+
 app.post("/api/student/acc", (req, res) => {
 
     let jwtSecretKey = process.env.STUJWT_SECRET_KEY;
@@ -207,6 +209,7 @@ app.post("/api/student/acc", (req, res) => {
         return res.send("error");
     }
 });
+
 app.post("/api/teacher/acc", (req, res) => {
     // Tokens are generally passed in the header of the request
     // Due to security reasons. 
@@ -229,6 +232,7 @@ app.post("/api/teacher/acc", (req, res) => {
         return res.send("error");
     }
 });
+
 app.post("/api/admin/acc", (req, res) => {
     // Tokens are generally passed in the header of the request
     // Due to security reasons. 
@@ -251,6 +255,7 @@ app.post("/api/admin/acc", (req, res) => {
         return res.send("error");
     }
 });
+
 app.post('/api/student/homework', (req, res) => {
     const wh = req.body.wh;
     var what = req.body.what;
@@ -296,6 +301,7 @@ app.post('/api/student/homework', (req, res) => {
         console.log("잘 입력 됐어요!")
     }
 });
+
 app.post('/api/login/admin', (req, res) => {
     const inputId = req.body.inputID;
     var inputPw = req.body.inputPW;
@@ -351,8 +357,8 @@ app.post('/api/student/homework/acc', (req, res) => {
             res.send("success")
         }
     })
-
 });
+
 app.post('/api/admin/homework', (req, res) => {
     const date = new Date();
 
@@ -367,8 +373,8 @@ app.post('/api/admin/homework', (req, res) => {
 
         res.send(result.toString());
     })
-
 });
+
 const { type } = require('os');
 const { stringify } = require('querystring');
 
