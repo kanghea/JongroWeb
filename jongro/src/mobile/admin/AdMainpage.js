@@ -19,20 +19,18 @@ function Mainpage() {
             }
         });
         axios.post('http://162.248.101.98:3001/api/admin/homework').then((res)=>{
-                localStorage.setItem('data',   `${res.data}`)
+                localStorage.setItem('data',res.data)
             }
         )
 
     })();
-    const login_id = (localStorage.getItem('login_id'));
-    const Class = (localStorage.getItem('Class'));
     return (
         <div className="h-screen">
             <div alt="header" className="flex h-10 flex-col fixed w-full">
                 <Header />
                 <div alt="네비게이션" className="pb-2 pt-16">
                     <div className="text-slate-600 font-semibold">서비스 목록</div>
-                    <div className="text-slate-700 font-thin text-xs"> *업데이트가 지속적으로 이뤄질 예정입니다.</div>
+                    <div className="text-slate-700 font-thin text-xs">숙제체크를 할수있습니다.</div>
                 </div>
             </div>
             <div alt="content" className="px-1 pt-28">
