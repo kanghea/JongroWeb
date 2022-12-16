@@ -392,9 +392,9 @@ app.post('/api/admin/homework', (req, res) => {
         console.log(typeof (result));
         
         sult = result.toString()
-        console.log(typeof(sult))
+        var obj = JSON.stringify(sult)
 
-        res.send(200, sult);
+        res.send(200, obj);
     })
 });
 
