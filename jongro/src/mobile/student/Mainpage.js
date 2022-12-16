@@ -32,13 +32,13 @@ function Mainpage() {
                         }).then((res) => {
                             if (res.data == "error") {
                                 if(res.data == "error"){
-                                    var comment = prompt(`${inputID}님의 소개를 입력해주세요!`, "");
+                                    var comment = prompt(`${login_id}님의 소개를 입력해주세요!`, "");
                                     console.log(comment)
                                     if(comment == null){
                                         window.location.href = '/m/student/mypage'
                                     } else {
                                         axios.post('http://162.248.101.98:3001/api/comment/student', {
-                                            login_id: inputID,
+                                            login_id: login_id,
                                             comment: comment
                                         }).then(() => {
                                             window.localStorage.setItem('comment', comment);
