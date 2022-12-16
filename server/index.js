@@ -388,13 +388,10 @@ app.post('/api/admin/homework', (req, res) => {
     const did = `${month}/${day}`
     var sqlin3 = `SELECT Name,\`${did}\` FROM homework`
     database.query(sqlin3, (err, result) => {
-        console.log(result);
-        console.log(typeof (result));
         
-        sult = result.toString()
-        var obj = JSON.stringify(sult)
+        var obj = JSON.stringify(result)
 
-        res.send(200, obj);
+        res.status(200).send(obj);
     })
 });
 
