@@ -122,7 +122,7 @@ app.post('/api/login/student/comment', (req, res) => {
                 if(comment == null){
                     res.send("error")
                 } else{
-                    res.send(comment)
+                    res.status(200).send(comment)
                 }
             }
         }
