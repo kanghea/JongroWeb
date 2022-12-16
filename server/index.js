@@ -100,10 +100,9 @@ app.post('/api/login/student/Class', (req, res) => {
 
 app.post('/api/login/student/comment', (req, res) => {
     const inputId = req.body.inputID;
-    var inputPw = req.body.inputPW;
     var inputPw = crypto.createHash('sha512').update(`${inputPw}`).digest('base64');
     console.log(inputPw)
-    const sqlInsert = `SELECT ID,login_id,password,Name,classs,comment from student WHERE login_id= '${inputId}' AND password = '${inputPw}'`;
+    const sqlInsert = `SELECT ID,login_id,password,Name,classs,comment from student WHERE login_id= '${inputId}'`;
 
     database.query(sqlInsert, (err, result) => {
         if (err) {

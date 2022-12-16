@@ -27,6 +27,28 @@ function Mainpage() {
                 window.localStorage.setItem('homework', '미완료');
             }
         })
+        axios.post('http://162.248.101.98:3001/api/login/student/comment', {
+                            inputID: login_id
+                        }).then((res) => {
+                            if (res.data == "error") {
+                                if(res.data == "error"){
+                                    var comment = prompt(`${inputID}님의 소개를 입력해주세요!`, "");
+                                    console.log(comment)
+                                    if(comment == null){
+                                        window.location.href = '/m/student/mypage'
+                                    } else {
+                                        axios.post('http://162.248.101.98:3001/api/comment/student', {
+                                            login_id: inputID,
+                                            comment: comment
+                                        }).then(() => {
+                                            window.localStorage.setItem('comment', comment);
+                                        });
+                                    }
+                                }
+                            } else {
+                                localStorage.setItem('comment', `${res.data}`);
+                            }
+                        });
 
     })();
     const login_id = (localStorage.getItem('login_id'));
