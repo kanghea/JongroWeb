@@ -38,10 +38,10 @@ function Login() {
                     inputPW: inputPW
                 }).then((res) => {
                     if (res.data == "error") {
-                        
+                        window.location.href = '/m'
                     } else {
                         localStorage.setItem('Class', `${res.data}`);
-                    
+                        window.location.href = '/m/student'
                     }
                 });
             }
