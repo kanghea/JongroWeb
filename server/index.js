@@ -384,10 +384,10 @@ app.post('/api/admin/homework', (req, res) => {
     const day = date.getDate();
 
     const did = `${month}/${day}`
-    var sqlin3 = `SELECT Name,\`${did}\` FROM homework Where \`12/16\` is null`
+    var sqlin3 = `SELECT Name,\`${did}\` FROM homework`
     var sqlin4 = `SELECT Name,\`${did}\` FROM homework Where \`12/16\` = "완료"`
 
-    database.query(sqlin4, (err, result) => {
+    database.query(sqlin3, (err, result) => {
         
         var obj = JSON.stringify(result)
 
