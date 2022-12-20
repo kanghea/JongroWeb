@@ -34,6 +34,9 @@ function TeaLoM() {
                 localStorage.setItem('login_id' , `${inputID}`);
                 console.log(res.data)
                 localStorage.setItem('access-token' , `${res.data}`);
+                axios.post('http://162.248.101.98:3001/api/admin/homework').then((res) => {
+                    localStorage.setItem('data',JSON.parse(res.data))
+                });
                 window.location.href = '/m/admin/mainpage';
             }
             
