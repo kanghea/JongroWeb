@@ -22,7 +22,7 @@ function Mainpage() {
             login_id: login_id,
             token: ACcesstoken
         }).then((res) => {
-            localStorage.setItem('data', res.data)
+            localStorage.setItem('data', JSON.stringify(res.data))
         });
     })();
     return (
