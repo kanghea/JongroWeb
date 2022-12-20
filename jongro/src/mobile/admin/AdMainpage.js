@@ -25,6 +25,16 @@ function Mainpage() {
             localStorage.setItem('data', JSON.stringify(res.data))
         });
     })();
+    const date = new Date();
+
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+
+    const did = `${month}/${day}`
+
+    const data = (localStorage.getItem('data'));
+    let names = JSON.stringify(data,["Name"]);
+    let homework = JSON.stringify(data,[`${did}`]);
     return (
         <div className="h-screen">
             <div alt="header" className="flex h-10 flex-col fixed w-full">
@@ -35,7 +45,7 @@ function Mainpage() {
                 </div>
             </div>
             <div alt="content" className="px-1 pt-28">
-                <div></div>
+                <div>{names}</div>
             </div>
         </div>
     )
