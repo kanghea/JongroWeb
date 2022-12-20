@@ -18,11 +18,12 @@ function Mainpage() {
                 window.location.href = '/m'
             }
         });
-        axios.post('http://162.248.101.98:3001/api/admin/homework').then((res)=>{
-                localStorage.setItem('data',JSON.parse(res.data))
-            }
-        )
-
+        axios.post('http://162.248.101.98:3001/api/admin/homework', {
+            login_id: login_id,
+            token: ACcesstoken
+        }).then((res) => {
+            localStorage.setItem('data',JSON.parse(res.data))
+        });
     })();
     return (
         <div className="h-screen">
