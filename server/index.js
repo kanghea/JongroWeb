@@ -391,7 +391,7 @@ app.post('/api/admin/homework', (req, res) => {
 
     database.query(sqlin4, (err, result) => {
         
-        var obj = JSON.parse(result)
+        var obj = JSON.stringify(result)
 
         res.status(200).send(obj);
     })
