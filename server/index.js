@@ -401,11 +401,17 @@ const { stringify } = require('querystring');
 app.listen(PORT, () => {
     const schedule = require('node-schedule');
     const rule = new schedule.RecurrenceRule()
+    const clock = new schedule.RecurrenceRule()
 
     rule.dayOfWeek = [new schedule.Range(1, 6)]
     rule.hour = 0
     rule.minute = 0
     rule.tz = 'Asia/Seoul'
+
+    clock.date = 0
+    clock.hour = 0
+    clock.minute = 0
+    clock.tz = 'Asia/Seoul'
 
     const offset = 1000 * 60 * 60 * 9
     const koreaNow = new Date((new Date()).getTime() + offset)
@@ -420,7 +426,6 @@ app.listen(PORT, () => {
     const did = `${month}/${day}`
 
     const sql = `ALTER TABLE jongrosky.homework ADD COLUMN \`${did}\` TEXT NULL`
-    const sql2 = `ALTER TABLE jongrosky.cheak ADD COLUMN \`${did}\` TEXT NULL`
 
     const dat = '0 0 0 * 1-6';
 
@@ -432,5 +437,22 @@ app.listen(PORT, () => {
             }
         })
     });
+    schedule.scheduleJob(clock, function() {
+        database.query(`SELECT count(*) name From homework`,(err, result) => {
+          for(var i = 0;i < result;i++){
+            database.query(`SELECT name From homework`,(err, result) => {
+                var kang = 0;
+                for(var j = 1;j < 30; j++){
+                    var sql3 = `SELECT count(*) \`12/${j}\`,name From homework where name = "${result[i]}" and \`12/16\` = "완료"`
+                    database.query(sql3, (err,res) => {
+                        kang = kang + res
+                    })
+                }
+              })
+          }  
+        })
+        
+    });
+    
     console.log(`Server is running on port: ${PORT}`);
 });
