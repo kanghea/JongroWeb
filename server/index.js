@@ -415,7 +415,7 @@ app.listen(PORT, () => {
 
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
-    const day = date.getDate();
+    const day = date.getDate() + 1;
 
     const did = `${month}/${day}`
 
@@ -429,8 +429,6 @@ app.listen(PORT, () => {
             if (err) { console.log(err) }
             else {
                 console.log(result)
-                res.send(result)
-                console.log("성공적으로 입력!")
             }
         })
     });
