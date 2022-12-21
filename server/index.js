@@ -402,8 +402,8 @@ app.listen(PORT, () => {
     const schedule = require('node-schedule');
     const rule = new schedule.RecurrenceRule()
 
-    rule.dayOfWeek = [0, new schedule.Range(2, 4)]
-    rule.hour = 9
+    rule.dayOfWeek = [new schedule.Range(1, 6)]
+    rule.hour = 0
     rule.minute = 0
     rule.tz = 'Asia/Seoul'
 
