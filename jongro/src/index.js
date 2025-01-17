@@ -26,6 +26,7 @@ import Mypage from './mobile/student/Mypage';
 import AdLoM from './mobile/admin/AdLoM';
 import AdMainpage from './mobile/admin/AdMainpage';
 import { RadarChart } from './mobile/student/radar/RadaChart';
+import GamePage from "./mobile/game/Main.js";
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -47,6 +48,7 @@ root.render(
         <Route path="/teacher/student" element={<TeacherStudent/>} />
         <Route path="/student/Mypage" element={<MainM/>} />
         <Route path="*" element={<Err/>} />
+        <Route path="/m/game" element={<GamePage/>} />
 
         <Route path="/m" element={<Login/>} />
         <Route path="/m/acc" element={<LoginM/>} />
