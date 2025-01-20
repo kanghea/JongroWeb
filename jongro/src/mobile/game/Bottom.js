@@ -1,6 +1,38 @@
 import React from "react";
 
-export default function Bottom({ onUndo, onRedo }) {
+export default function Bottom({
+  undoRef,
+  redoRef,
+  newRef,
+  hintRef,
+  giveUpRef,
+}) {
+  function handleUndoClick(){
+    if(undoRef.current) {
+      undoRef.current();
+    }
+  }
+  function handleRedoClick(){
+    if(redoRef.current) {
+      redoRef.current();
+    }
+  }
+  function handleNewClick(){
+    if(newRef.current) {
+      newRef.current();
+    }
+  }
+  function handleHintClick(){
+    if(hintRef.current) {
+      hintRef.current(); // => Body의 handleHint( "intermediate" )
+    }
+  }
+  function handleGiveUpClick(){
+    if(giveUpRef.current){
+      giveUpRef.current();
+    }
+  }
+
   return (
     <div
       className="
@@ -9,30 +41,46 @@ export default function Bottom({ onUndo, onRedo }) {
         px-4 py-2
         flex items-center justify-center
       "
-      style={{ height: "60px" }} // 바닥 높이
+      style={{ height: "60px" }}
     >
-      {/* 버튼들을 가운데 정렬 */}
-      <div className="flex items-center space-x-3">
-        <button className="px-3 py-1 bg-[#4C4C4C] rounded hover:bg-[#5C5C5C] text-sm">
+      <div className="flex items-center space-x-2">
+        <button className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-sm rounded">
           옵션
         </button>
-        <button className="px-3 py-1 bg-[#4C4C4C] rounded hover:bg-[#5C5C5C] text-sm">
+
+        <button
+          onClick={handleNewClick}
+          className="px-3 py-1 bg-red-600 hover:bg-red-700 text-sm rounded"
+        >
           신규
         </button>
-        <button className="px-3 py-1 bg-[#4C4C4C] rounded hover:bg-[#5C5C5C] text-sm">
+
+        <button
+          onClick={handleHintClick}
+          className="px-3 py-1 bg-green-600 hover:bg-green-700 text-sm rounded"
+        >
           힌트
         </button>
+
         <button
-          className="px-3 py-1 bg-[#4C4C4C] rounded hover:bg-[#5C5C5C] text-sm"
-          onClick={onUndo}
+          onClick={handleUndoClick}
+          className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-sm rounded"
         >
           뒤로
         </button>
+
         <button
-          className="px-3 py-1 bg-[#4C4C4C] rounded hover:bg-[#5C5C5C] text-sm"
-          onClick={onRedo}
+          onClick={handleRedoClick}
+          className="px-3 py-1 bg-gray-600 hover:bg-gray-700 text-sm rounded"
         >
           앞으로
+        </button>
+
+        <button
+          onClick={handleGiveUpClick}
+          className="px-3 py-1 bg-gray-300 hover:bg-gray-400 text-sm rounded text-black"
+        >
+          기권
         </button>
       </div>
     </div>

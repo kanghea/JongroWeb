@@ -5,6 +5,8 @@ import Main from './desktop/main';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter as Router, Route, Routes,Link, BrowserRouter} from 'react-router-dom';
 
+import OnlineBody from "./mobile/game/OnlineBody.js";
+
 import Student from './desktop/student';
 import Teacher from './desktop/Teacher.js';
 import TeacherMypage from './desktop/teacherCom/TeacherMypage';
@@ -26,8 +28,10 @@ import Mypage from './mobile/student/Mypage';
 import AdLoM from './mobile/admin/AdLoM';
 import AdMainpage from './mobile/admin/AdMainpage';
 import { RadarChart } from './mobile/student/radar/RadaChart';
-import GamePage from "./mobile/game/Main.js";
 
+import GamePage from "./mobile/game/Main.js";
+import ComputerGame from "./mobile/game/BotMain.js";
+import GameHome from "./mobile/game/HomeMain.js";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -48,7 +52,13 @@ root.render(
         <Route path="/teacher/student" element={<TeacherStudent/>} />
         <Route path="/student/Mypage" element={<MainM/>} />
         <Route path="*" element={<Err/>} />
+
         <Route path="/m/game" element={<GamePage/>} />
+        <Route path="/m/game/computer" element={<ComputerGame/>} />
+        <Route path="/m/home" element={<GameHome/>} />
+
+        <Route path="/m/game/:roomId" element={<OnlineBody />} />
+        {/*온라인 라우트*/}
 
         <Route path="/m" element={<Login/>} />
         <Route path="/m/acc" element={<LoginM/>} />

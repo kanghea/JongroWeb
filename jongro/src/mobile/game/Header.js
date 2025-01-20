@@ -10,7 +10,7 @@ export default function Header() {
 
       {/* 게임 로고 / 제목 (중앙) */}
       <div className="text-gray-100 font-bold text-lg">
-        오목 게임 (Chess.com Style)
+        오목 게임
       </div>
 
       {/* 우측 공간 (비어있거나 옵션 버튼 등) */}

@@ -27,6 +27,7 @@
     "react-table": "^7.8.0",
     "redirect": "^0.2.0",
     "sass": "^1.56.1",
+    "socket.io-client": "^4.8.1",
     "typescript": "^4.9.3",
     "web-vitals": "^2.1.4",
     "yarn": "^1.22.19"
@@ -57,6 +58,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.12",
+    "babel-loader": "^9.2.1",
     "postcss": "^8.4.18",
     "tailwindcss": "^3.1.8"
   }
