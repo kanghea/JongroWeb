@@ -1,19 +1,20 @@
+//////////////////////////////////////////////
+// index.js
+//////////////////////////////////////////////
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Main from './desktop/main';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter as Router, Route, Routes,Link, BrowserRouter} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import OnlineBody from "./mobile/game/OnlineBody.js";
-
 import Student from './desktop/student';
 import Teacher from './desktop/Teacher.js';
 import TeacherMypage from './desktop/teacherCom/TeacherMypage';
 import Parents from './desktop/Parents';
 import MainM from './mobile/student/LoginM';
 import R_Login from './desktop/studentCom/R_Login';
-
 import StudentMypage from './desktop/studentCom/StudentMypage';
 import Loading from './desktop/components/loading';
 import Err from './desktop/Err';
@@ -24,7 +25,6 @@ import Mainpage from './mobile/student/Mainpage';
 import Login from './mobile/student/Login';
 import Stuhomework from './mobile/student/Stuhomework';
 import Mypage from './mobile/student/Mypage';
-
 import AdLoM from './mobile/admin/AdLoM';
 import AdMainpage from './mobile/admin/AdMainpage';
 import { RadarChart } from './mobile/student/radar/RadaChart';
@@ -36,7 +36,7 @@ import GameHome from "./mobile/game/HomeMain.js";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path='/' element={<Loading/>} />
         <Route path="/main" element={<Main />} />
@@ -53,12 +53,13 @@ root.render(
         <Route path="/student/Mypage" element={<MainM/>} />
         <Route path="*" element={<Err/>} />
 
+        {/* 오목 관련 라우트 */}
         <Route path="/m/game" element={<GamePage/>} />
         <Route path="/m/game/computer" element={<ComputerGame/>} />
         <Route path="/m/home" element={<GameHome/>} />
 
+        {/* ★ 온라인 대국 방 (방 ID) */}
         <Route path="/m/game/:roomId" element={<OnlineBody />} />
-        {/*온라인 라우트*/}
 
         <Route path="/m" element={<Login/>} />
         <Route path="/m/acc" element={<LoginM/>} />
@@ -68,9 +69,8 @@ root.render(
 
         <Route path="/m/admin" element={<AdLoM/>}/>
         <Route path="/m/admin/mainpage" element={<AdMainpage/>}/>
-        
       </Routes>
-    </BrowserRouter>
+    </Router>
   </React.StrictMode>
 );
 
