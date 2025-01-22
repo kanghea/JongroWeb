@@ -35,7 +35,7 @@ import GameHome from "./mobile/game/HomeMain.js";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  //<React.StrictMode>
     <Router>
       <Routes>
         <Route path='/' element={<Loading/>} />
@@ -71,7 +71,7 @@ root.render(
         <Route path="/m/admin/mainpage" element={<AdMainpage/>}/>
       </Routes>
     </Router>
-  </React.StrictMode>
+  //</React.StrictMode>
 );
 
 reportWebVitals();

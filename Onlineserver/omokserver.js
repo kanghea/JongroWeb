@@ -1,6 +1,3 @@
-//////////////////////////////////////////////
-// onlineserver.js
-//////////////////////////////////////////////
 const express = require("express");
 const http = require("http");
 const cors = require("cors");
@@ -29,9 +26,19 @@ const PORT = 3001;
  *   gameStarted:false or true,
  *   lastMove:{row,col} or null,
  *   timerInterval: null,
+ *   roomName: string,
  * }
  */
 const rooms = {};
+
+/** ★ 서버 전체 접속자 추적 객체 (소켓ID -> 닉네임) */
+const onlineUsers = {};
+
+/** ★ Guest 방 닉네임 배정용 카운터 */
+let guestCounter = 0;
+
+/** ★ 서버 전체 유저(글로벌) 카운터 (HomeBody.js에서 보이는 '접속자 목록') */
+let globalUserCounter = 0;
 
 /** 15x15 짜리 빈 오목판 생성 */
 function createEmptyBoard(size = 15) {
@@ -52,6 +59,7 @@ function createRoomData() {
     gameStarted: false,
     lastMove: null,
     timerInterval: null,
+    roomName: "", // 방 이름
   };
 }
 
@@ -78,6 +86,7 @@ function buildRoomPayload(roomId) {
     whiteTime: d.whiteTime,
     winner: d.winner,
     gameStarted: d.gameStarted,
+    roomName: d.roomName, // 방 이름
   };
 }
 
@@ -100,9 +109,7 @@ function countStones(board, row, col, player, dx, dy) {
 
 /** 5목 체크 */
 function checkWinner(board, row, col, player) {
-  const dirs = [
-    [0,1],[1,0],[1,1],[1,-1]
-  ];
+  const dirs = [[0,1],[1,0],[1,1],[1,-1]];
   for (const [dx, dy] of dirs) {
     const c1 = countStones(board, row, col, player, dx, dy);
     const c2 = countStones(board, row, col, player, -dx, -dy);
@@ -111,12 +118,10 @@ function checkWinner(board, row, col, player) {
   return false;
 }
 
-/** 삼삼금수(흑) */
+/** 삼삼금수(흑) - 간단히 open three만 체크하는 예시 */
 function isDoubleThree(board, row, col, player) {
   let openThreeCount = 0;
-  const dirs = [
-    [0,1],[1,0],[1,1],[1,-1]
-  ];
+  const dirs = [[0,1],[1,0],[1,1],[1,-1]];
   for (const [dx, dy] of dirs) {
     if (isOpenThree(board, row, col, player, dx, dy)) {
       openThreeCount++;
@@ -221,49 +226,69 @@ function resetGame(roomId) {
   io.to(roomId).emit("resetChat");
 }
 
-/////////////////////////////////////////////////////
-// ★ 추가 이벤트: 현재 대기 중인 방 목록 요청
-/////////////////////////////////////////////////////
+/**
+ * ★ getWaitingRoomsList:
+ *    - 승자가 정해지지 않은 모든 방(대기중 + 진행중) 노출
+ */
 function getWaitingRoomsList() {
-  // 현재 "게임시작 전"이거나 "인원<2" 인 방들만 반환
   const list = [];
   for (const rid in rooms) {
     const rm = rooms[rid];
-    // 예: 'gameStarted=false' 이거나 인원<2
-    // 여기서는 "1명만 있는 방" 정도를 대기 중으로 취급
-    if (!rm.gameStarted && rm.players.length < 2 && !rm.winner) {
-      list.push({
-        roomId: rid,
-        timeMode: rm.timeMode,
-        players: rm.players.map(p => ({
-          nickname: p.nickname,
-          stone: p.stone
-        }))
-      });
+    // 이미 winner가 있으면 게임 종료된 방이므로 제외
+    if (rm.winner) {
+      continue;
     }
+    // 그 외 (대기중 + 진행중) 전부 목록에 추가
+    list.push({
+      roomId: rid,
+      timeMode: rm.timeMode,
+      players: rm.players.map(p => ({
+        nickname: p.nickname,
+        stone: p.stone
+      })),
+      roomName: rm.roomName,
+      gameStarted: rm.gameStarted
+    });
   }
   return list;
 }
 
+/////////////////////////////////////////////////////////////
+// Socket.IO
+/////////////////////////////////////////////////////////////
+
 io.on("connection", (socket) => {
   console.log(`새 클라이언트 접속! 소켓ID=${socket.id}`);
 
-  // [이벤트] 대기 중인 방 목록을 달라고 요청
+  globalUserCounter++;
+  const globalGuestName = `User${globalUserCounter}`;
+  onlineUsers[socket.id] = globalGuestName;
+
+  // 전체 유저 목록
+  socket.on("requestOnlineUsers", () => {
+    const userList = Object.values(onlineUsers);
+    socket.emit("onlineUsers", userList);
+  });
+
+  // 대기(및 진행중) 방 목록 요청
   socket.on("requestWaitingRooms", () => {
     const waitingRooms = getWaitingRoomsList();
-    // 클라이언트에게 대기방 목록 전송
     socket.emit("waitingRooms", waitingRooms);
   });
 
   /**
    * 방 참여
    */
-  socket.on("joinRoom", ({ roomId, nickname, timeChoice }) => {
+  socket.on("joinRoom", ({ roomId, roomName, timeChoice }) => {
+    if (!roomName || !roomName.trim()) {
+      roomName = "NoName";
+    }
     socket.join(roomId);
-    console.log(` > [joinRoom] 소켓ID=${socket.id}, 방번호=${roomId}, 닉네임=${nickname}`);
+    console.log(` > [joinRoom] 소켓ID=${socket.id}, 방번호=${roomId}, 방이름=${roomName}`);
 
     if (!rooms[roomId]) {
       rooms[roomId] = createRoomData();
+      rooms[roomId].roomName = roomName;
     }
     const d = rooms[roomId];
 
@@ -289,9 +314,13 @@ io.on("connection", (socket) => {
       d.whiteTime = t;
     }
 
+    // 플레이어 닉네임: Guest#
+    guestCounter++;
+    const assignedNick = `Guest${guestCounter}`;
+
     d.players.push({
       socketId: socket.id,
-      nickname,
+      nickname: assignedNick,
       stone: null,
     });
 
@@ -398,10 +427,56 @@ io.on("connection", (socket) => {
   });
 
   /**
-   * 연결 해제 -> 상대방 이탈 처리
+   * ★ leaveRoom (뒤로가기)
+   */
+  socket.on("leaveRoom", ({ roomId }) => {
+    const rm = rooms[roomId];
+    if (!rm) return;
+    const idx = rm.players.findIndex(p => p.socketId === socket.id);
+    if (idx >= 0) {
+      rm.players.splice(idx, 1);
+
+      // 1명만 남았고 승자없으면 => 남은사람 승리
+      if (rm.players.length === 1 && !rm.winner) {
+        rm.winner = rm.players[0].stone;
+        rm.winReason = "상대방 이탈";
+        clearInterval(rm.timerInterval);
+        rm.gameStarted = false;
+
+        io.to(roomId).emit("updateGame", {
+          board: rm.board,
+          currentPlayer: rm.currentPlayer,
+          winner: rm.winner,
+          blackTime: rm.blackTime,
+          whiteTime: rm.whiteTime,
+          lastMove: rm.lastMove
+        });
+      }
+      // 0명이면 방 완전 리셋
+      else if (rm.players.length === 0) {
+        resetGame(roomId);
+      }
+      // 1명 미만(=0)이 아니고, 승자도 없으면 gameStarted=false
+      else if (rm.players.length < 2 && !rm.winner) {
+        rm.gameStarted = false;
+      }
+
+      io.to(roomId).emit("roomData", buildRoomPayload(roomId));
+    }
+
+    // 대기방 목록 갱신
+    io.emit("waitingRooms", getWaitingRoomsList());
+  });
+
+  /**
+   * 연결 해제(disconnect) -> 상대방 이탈 처리
    */
   socket.on("disconnect", () => {
     console.log(`연결 해제: ${socket.id}`);
+
+    // onlineUsers 에서 제거
+    delete onlineUsers[socket.id];
+
     let foundRoom = null;
 
     // 참여중인 방에서 제거
@@ -442,6 +517,9 @@ io.on("connection", (socket) => {
       }
     }
     console.log(`  -> 정리된 방번호=${foundRoom??"없음"}`);
+
+    // 대기방 목록 갱신
+    io.emit("waitingRooms", getWaitingRoomsList());
   });
 });
 

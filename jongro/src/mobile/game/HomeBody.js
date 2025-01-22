@@ -2,169 +2,298 @@
 // src/mobile/game/HomeBody.js
 ////////////////////////////////////////
 import React, { useEffect, useState, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
+import { getSocket } from "../../socket";
 
-// 서버 주소 (본인 PC IP나 도메인)
-const socket = io("http://192.168.0.22:3001");
+// 자물쇠 아이콘
+import lockIcon from "../images/rock.png";
+import unlockIcon from "../images/unrock.png";
+
+// (임의) 프로필 아바타 예시 이미지
+import myAvatar from "../images/player1.png"; // 본인의 실제 이미지 경로 사용
+
+// 싱글톤 소켓
+const socket = getSocket();
 
 export default function HomeBody() {
   const navigate = useNavigate();
 
-  // 대기중인 방 목록
+  // 대기 중인 방 목록
   const [waitingRooms, setWaitingRooms] = useState([]);
+  // 접속자 목록(실제 서버에서 받아옴)
+  const [userList, setUserList] = useState([]);
+
+  // (예시) 내 정보
+  const [myInfo, setMyInfo] = useState({
+    nickname: "패션테라피스트", // 예시
+    totalWins: 0,
+    time: 0,
+    level: 1,
+    exp: 0,
+    expMax: 120
+  });
 
   // 소켓 이벤트 중복 등록 방지
   const didSetupRef = useRef(false);
 
   useEffect(() => {
-    // 연결은 이미 되어있다고 가정. 여기서 이벤트 등록
     if (!didSetupRef.current) {
       didSetupRef.current = true;
 
-      // 대기방 목록 수신
+      // 대기 중인 방 목록 수신
       socket.on("waitingRooms", (rooms) => {
         console.log("받은 waitingRooms:", rooms);
         setWaitingRooms(rooms);
       });
+
+      // 접속자 목록 수신
+      socket.on("onlineUsers", (list) => {
+        console.log("받은 onlineUsers:", list);
+        setUserList(list);
+      });
+
+      // 서버에서 "myInfo" 같은 이벤트로 내 정보를 준다면:
+      // socket.on("myInfo", (data) => setMyInfo(data));
     }
 
-    // 컴포넌트가 마운트될 때 서버에 대기 중인 방 목록 요청
+    // 마운트 시: 서버에 목록 요청
     socket.emit("requestWaitingRooms");
+    socket.emit("requestOnlineUsers");
+    // socket.emit("requestMyInfo"); // 필요시
 
     return () => {
       // cleanup if needed
+      // socket.off("waitingRooms");
+      // socket.off("onlineUsers");
     };
   }, []);
 
-  // "도전" 버튼 => /m/game/:roomId?timeChoice=...&nickname=...
-  function handleChallenge(roomId, timeMode) {
-    // 닉네임은 일단 "Guest" 예시, 필요시 입력받거나 저장 가능
-    const myNick = "Challenger";
-    // timeMode= e.g. 60(1분), 180(3분)...
+  /** "방 만들기" 클릭 => /m/game (방 만들기 화면) */
+  function handleCreateRoom() {
+    navigate("/m/game");
+  }
 
-    // timeMode-> "3분"/"5분" 은 서버에서 해석했지만, 
-    // 여기서는 역매핑이 필요하면 하거나, 
-    // 그냥 1분/3분등 문자열로 넘겨도 됨.
+  /** "빠른 입장" */
+  function handleQuickJoin() {
+    alert("빠른 입장: 아직 구현되지 않았습니다!");
+  }
+
+  /** "상점" */
+  function handleShop() {
+    alert("상점: 아직 구현되지 않았습니다!");
+  }
+
+  /** 나머지 탭들 */
+  function handleDictionary() {
+    alert("사전: 아직 구현되지 않았습니다!");
+  }
+  function handleReplay() {
+    alert("리플레이: 아직 구현되지 않았습니다!");
+  }
+  function handleRanking() {
+    alert("랭킹: 아직 구현되지 않았습니다!");
+  }
+
+  /** 방 입장 => /m/game/:roomId?timeChoice=... */
+  function handleChallenge(roomId, timeMode) {
     let timeChoiceStr = "1분";
     if (timeMode === 180) timeChoiceStr = "3분";
     else if (timeMode === 300) timeChoiceStr = "5분";
 
-    // 이동
-    navigate(`/m/game/${roomId}?timeChoice=${timeChoiceStr}&nickname=${myNick}`);
+    // 방에 비번이 있다면 별도 처리
+    navigate(`/m/game/${roomId}?timeChoice=${timeChoiceStr}&roomName=`);
+  }
+
+  /** 목록 새로고침 */
+  function handleRefresh() {
+    socket.emit("requestWaitingRooms");
+    socket.emit("requestOnlineUsers");
+    // socket.emit("requestMyInfo");
   }
 
   return (
-    <div className="w-full min-h-screen bg-[#3A3A3A] text-white flex">
-      {/* 왼쪽 사이드바 */}
-      <div className="w-64 bg-[#2B2B2B] flex flex-col items-start p-4 space-y-4">
-        {/* 상단 프로필 / 계급 아이콘 (임시) */}
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gray-600 rounded" />
-          <div className="text-lg font-bold">#12 플레이</div>
-          <div className="text-sm">137</div>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gray-600 rounded" />
-          <div className="text-lg font-bold">퍼즐</div>
-          <div className="text-sm">418🔥2</div>
-        </div>
-
-        {/* 새 게임 버튼 */}
-        <Link
-          to="/m/game"
-          className="w-full px-2 py-2 bg-[#3B3B3B] hover:bg-[#4B4B4B] rounded"
+    <div className="w-full h-screen bg-[#3A3A3A] text-white flex flex-col">
+      {/* 상단 탭 */}
+      <div className="flex items-center bg-[#2B2B2B] h-12 px-4 space-x-4">
+        <button
+          onClick={handleCreateRoom}
+          className="text-sm font-bold hover:text-yellow-200"
         >
-          새 게임
-        </Link>
-
-        {/* 봇과 플레이 */}
-        <Link
-          to="/m/game/computer"
-          className="w-full px-2 py-2 bg-[#3B3B3B] hover:bg-[#4B4B4B] rounded"
-        >
-          봇과 플레이
-        </Link>
-
-        {/* 친구와 플레이하기 */}
-        <button className="w-full px-2 py-2 bg-[#3B3B3B] hover:bg-[#4B4B4B] rounded">
-          친구와 플레이하기
+          방 만들기
         </button>
+        <button
+          onClick={handleQuickJoin}
+          className="text-sm font-bold hover:text-yellow-200"
+        >
+          빠른 입장
+        </button>
+        <button
+          onClick={handleShop}
+          className="text-sm font-bold hover:text-yellow-200"
+        >
+          상점
+        </button>
+        <button
+          onClick={handleDictionary}
+          className="text-sm font-bold hover:text-yellow-200"
+        >
+          사전
+        </button>
+        <button
+          onClick={handleReplay}
+          className="text-sm font-bold hover:text-yellow-200"
+        >
+          리플레이
+        </button>
+        <button
+          onClick={handleRanking}
+          className="text-sm font-bold hover:text-yellow-200"
+        >
+          랭킹
+        </button>
+
+        <div className="ml-auto text-xs text-gray-300">
+          {/* 우측 여백 */}
+        </div>
       </div>
 
-      {/* 메인 컨텐츠 */}
-      <div className="flex-1 flex flex-col p-4 space-y-4 overflow-auto">
-        {/* 상단 카드 영역 */}
-        <div className="flex space-x-4">
-          {/* 퍼즐 풀기 */}
-          <div className="bg-[#2B2B2B] w-1/3 rounded p-2 flex flex-col items-center space-y-2">
-            <div className="w-full h-32 bg-green-600">이미지(퍼즐)</div>
-            <div className="text-sm font-bold">퍼즐 풀기</div>
+      {/* 메인 영역: 좌(유저리스트+내정보), 우(방목록) */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* 왼쪽 패널 */}
+        <div className="w-64 bg-[#2B2B2B] flex flex-col">
+          {/* 접속자 목록 */}
+          <div className="flex-1 overflow-auto text-sm p-2">
+            <div className="text-gray-200 mb-1">
+              ■ 접속자 목록 [{userList.length}]
+            </div>
+            {userList.map((name, i) => (
+              <div
+                key={i}
+                className="truncate hover:text-yellow-200 cursor-pointer"
+              >
+                {name}
+              </div>
+            ))}
           </div>
 
-          {/* 레슨 시작 */}
-          <div className="bg-[#2B2B2B] w-1/3 rounded p-2 flex flex-col items-center space-y-2">
-            <div className="w-full h-32 bg-blue-600">이미지(레슨)</div>
-            <div className="text-sm font-bold">레슨 시작</div>
-          </div>
+          {/* 내 정보 영역 */}
+          <div className="bg-[#3A3A3A] p-3 flex items-center">
+            {/* 프로필 이미지 */}
+            <div className="w-14 h-14 mb-2 mr-2">
+              <img
+                src={myAvatar}
+                alt="myAvatar"
+                className="w-full h-full object-contain"
+              />
+            </div>
 
-          {/* 리뷰 vs barahana */}
-          <div className="bg-[#2B2B2B] w-1/3 rounded p-2 flex flex-col items-center space-y-2">
-            <div className="w-full h-32 bg-yellow-600">이미지(리뷰)</div>
-            <div className="text-sm font-bold">리뷰 vs barahana</div>
+            <div>
+              <div className="text-sm font-bold mb-1">
+                <span className="mr-2">[{myInfo.level}]</span>
+                {myInfo.nickname}
+              </div>
+              <div className="text-xs text-gray-300">
+                통산 {myInfo.totalWins}승
+              </div>
+
+              <div className="text-sm mb-1">레벨 {myInfo.level}</div>
+
+              {/* 경험치 바 */}
+              <div className="w-full bg-[#4B4B4B] h-2 rounded relative">
+                <div
+                  className="bg-yellow-400 h-2 rounded"
+                  style={{
+                    width: `${(myInfo.exp / myInfo.expMax) * 100}%`
+                  }}
+                />
+              </div>
+              <div className="text-xs text-gray-200 mt-1">
+                {myInfo.exp} / {myInfo.expMax}
+              </div>
+            </div>
+
+            {/* 예: 레벨, 닉네임, 통산승, etc. */}
+
           </div>
         </div>
 
-        {/* 광고 배너 자리 */}
-        <div className="bg-[#2B2B2B] h-20 rounded flex items-center justify-center">
-          <div className="text-sm text-gray-300">광고 자리 (예: Disney+)</div>
-        </div>
+        {/* 가운데(방 목록) */}
+        <div className="flex-1 bg-[#3A3A3A] flex flex-col p-2">
+          {/* 방 목록 헤더 */}
+          <div className="flex items-center justify-between h-10 px-2 bg-[#2B2B2B] rounded">
+            <span className="text-sm font-bold">
+              방 목록 [{waitingRooms.length}]
+            </span>
+            <button
+              onClick={handleRefresh}
+              className="text-xs text-gray-300 hover:text-white"
+            >
+              목록 새로고침
+            </button>
+          </div>
 
-        {/* 일일 게임 / 대기중인 방 목록 */}
-        <div>
-          <h2 className="text-lg font-bold mb-2">
-            일일 게임 ({waitingRooms.length})
-          </h2>
-
-          <div className="bg-[#2B2B2B] p-2 rounded flex flex-col space-y-2">
-            {waitingRooms.length === 0 ? (
-              <div className="text-gray-400 text-sm">
+          {/* 방 목록 스크롤 영역 */}
+          <div className="flex-1 overflow-auto mt-2 space-y-2">
+            {waitingRooms.length === 0 && (
+              <div className="text-gray-400 text-sm px-2">
                 현재 대기중인 방이 없습니다.
               </div>
-            ) : (
-              waitingRooms.map((room, idx) => {
-                // 방에 가입한 첫번째 플레이어 닉네임? (players[0]) or ???
-                const player = room.players[0];
-                const nickname = player ? player.nickname : "??";
-                // timeMode가 60이면 1분, 180=3분, ...
-                let timeLabel = "1분";
-                if (room.timeMode === 180) timeLabel = "3분";
-                else if (room.timeMode === 300) timeLabel = "5분";
+            )}
 
-                return (
-                  <div key={idx} className="flex space-x-2 items-center">
-                    {/* 체스판 미리보기/이미지 자리에 일단 회색 */}
-                    <div className="w-16 h-16 bg-gray-500 rounded" />
-                    {/* 상대 정보 */}
-                    <div className="flex flex-col">
-                      <span className="font-bold">{nickname}</span>
-                      <span className="text-sm">{timeLabel}</span>
-                      <span className="text-xs text-gray-300">
-                        RoomID: {room.roomId}
-                      </span>
-                    </div>
-                    {/* 도전 버튼 */}
+            {waitingRooms.map((room, idx) => {
+              const playersCount = room.players.length;
+              const maxPlayers = 2;
+              let timeLabel = "1분";
+              if (room.timeMode === 180) timeLabel = "3분";
+              else if (room.timeMode === 300) timeLabel = "5분";
+
+              // 패스워드 예시
+              const hasPassword = !!room.hasPassword;
+              const iconSrc = hasPassword ? lockIcon : unlockIcon;
+
+              // ★ 진행중이면 붉은 배경, 아니면 기존 회색
+              //   (bg-red-800 / text-white) vs (bg-[#4B4B4B] / text-gray-100)
+              const rowClass = room.gameStarted
+                ? "bg-red-800 text-white"
+                : "bg-[#4B4B4B] text-gray-100";
+
+              const displayRoomName = room.roomName || "???";
+              const nicknamesStr = room.players.map((p) => p.nickname).join(", ");
+              // 상태 표시
+              const statusText = room.gameStarted ? "진행중" : "대기중";
+
+              return (
+                <div
+                  key={idx}
+                  className={`flex items-center rounded px-2 py-2 ${rowClass}`}
+                >
+                  <div className="flex flex-col flex-1">
+                    <span className="font-bold text-sm">
+                      {displayRoomName} | {nicknamesStr}
+                    </span>
+                    <span className="text-xs text-gray-300">
+                      {playersCount}/{maxPlayers} | {timeLabel} | {statusText}
+                    </span>
+                  </div>
+
+                  <img
+                    src={iconSrc}
+                    alt="lockIcon"
+                    className="w-4 h-4 mr-2"
+                  />
+
+                  {/* 진행중이면 입장 버튼 비활성 (예시) */}
+                  {!room.gameStarted && (
                     <button
                       onClick={() => handleChallenge(room.roomId, room.timeMode)}
-                      className="ml-auto bg-green-700 hover:bg-green-800 px-3 py-1 rounded"
+                      className="bg-green-600 hover:bg-green-700 text-xs px-2 py-1 rounded"
                     >
-                      도전
+                      입장
                     </button>
-                  </div>
-                );
-              })
-            )}
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

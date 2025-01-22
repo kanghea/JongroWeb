@@ -1,20 +1,14 @@
-////////////////////////////////////////
-// src/mobile/game/OnlineBody.js
-////////////////////////////////////////
 import React, {
   useState,
   useEffect,
-  forwardRef,
-  useRef
+  useRef,
+  forwardRef
 } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import { io } from "socket.io-client";
+import { getSocket } from "../../socket.js";
 
 import player1Image from "../images/player1.png";
 import player2Image from "../images/player2.png";
-
-// 서버 주소
-const socket = io("http://192.168.0.22:3001");
 
 /** 초 -> "m:ss" 포맷 */
 function formatTime(sec) {
@@ -28,22 +22,119 @@ function createEmptyBoard(size = 15) {
   return Array.from({ length: size }, () => Array(size).fill(0));
 }
 
-function OnlineBody(props, ref) {
+/** Goban(오목판) */
+function Goban({ board, lastMove, onCellClick }) {
+  const [boardSizePx, setBoardSizePx] = useState(600);
+
+  useEffect(() => {
+    function handleResize() {
+      const w = window.innerWidth;
+      const newSize = w < 640 ? w - 24 : 600;
+      setBoardSizePx(newSize > 200 ? newSize : 200);
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const size = 15;
+  const cellGap = boardSizePx / (size - 1);
+
+  return (
+    <div
+      className="relative"
+      style={{
+        width: boardSizePx + "px",
+        height: boardSizePx + "px",
+        backgroundColor: "#DAB86F",
+      }}
+    >
+      {/* 격자선 */}
+      {Array.from({ length: size }, (_, i) => (
+        <div key={i}>
+          <div
+            className="absolute"
+            style={{
+              top: i * cellGap,
+              left: 0,
+              width: boardSizePx,
+              height: "2px",
+              backgroundColor: "#5A3A1B",
+            }}
+          />
+          <div
+            className="absolute"
+            style={{
+              left: i * cellGap,
+              top: 0,
+              width: "2px",
+              height: boardSizePx,
+              backgroundColor: "#5A3A1B",
+            }}
+          />
+        </div>
+      ))}
+      {/* 돌 표시 */}
+      {board.map((rowArr, r) =>
+        rowArr.map((val, c) => {
+          if (val === 0) return null;
+          const isLast = lastMove && lastMove.row === r && lastMove.col === c;
+          return (
+            <div
+              key={`${r}-${c}`}
+              className={`
+                absolute
+                ${val === 1 ? "bg-black" : "bg-white"}
+                rounded-full
+                border
+                ${val === 2 ? "border-gray-500" : "border-black"}
+                ${isLast ? "outline outline-2 outline-yellow-300" : ""}
+              `}
+              style={{
+                width: cellGap * 0.65,
+                height: cellGap * 0.65,
+                top: r * cellGap - (cellGap * 0.65) / 2,
+                left: c * cellGap - (cellGap * 0.65) / 2,
+              }}
+              onClick={() => onCellClick(r, c)}
+            />
+          );
+        })
+      )}
+      {/* 클릭 영역(투명) */}
+      {Array.from({ length: size }, (_, r) =>
+        Array.from({ length: size }, (_, c) => (
+          <div
+            key={`pos-${r}-${c}`}
+            className="absolute"
+            style={{
+              width: cellGap,
+              height: cellGap,
+              top: r * cellGap - cellGap / 2,
+              left: c * cellGap - cellGap / 2,
+            }}
+            onClick={() => onCellClick(r, c)}
+          />
+        ))
+      )}
+    </div>
+  );
+}
+
+function OnlineBody() {
   const navigate = useNavigate();
 
   // URL 파라미터와 쿼리
-  const { roomId } = useParams(); // ex: room_1689999999
+  const { roomId } = useParams();
   const [searchParams] = useSearchParams();
-  const nickname = searchParams.get("nickname") || "Guest";
+  const roomName = searchParams.get("roomName") || "";
   const timeChoice = searchParams.get("timeChoice") || "1분";
 
-  // 오목판 상태
+  // 기본 상태들
   const [board, setBoard] = useState(createEmptyBoard());
   const [currentPlayer, setCurrentPlayer] = useState(1);
   const [winner, setWinner] = useState(null);
   const [lastMove, setLastMove] = useState(null);
-
-  // 타이머
   const [blackTime, setBlackTime] = useState(60);
   const [whiteTime, setWhiteTime] = useState(60);
   const [gameStarted, setGameStarted] = useState(false);
@@ -53,35 +144,36 @@ function OnlineBody(props, ref) {
   const [oppStone, setOppStone] = useState(null);
   const [oppNickname, setOppNickname] = useState("");
 
-  // 승리 모달
-  const [showWinModal, setShowWinModal] = useState(false);
-  const [amIWinner, setAmIWinner] = useState(false);
-  const [winReason, setWinReason] = useState("");
+  // 방 이름 표시용 State
+  const [theRoomName, setTheRoomName] = useState(roomName);
 
-  // 채팅
+  // 채팅 관련
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState("");
   const [emojiPanelOpen, setEmojiPanelOpen] = useState(false);
   const chatInputRef = useRef(null);
 
-  // 소켓 이벤트 중복 방지
-  const didSetupSocketRef = useRef(false);
+  // 승리 모달
+  const [showWinModal, setShowWinModal] = useState(false);
+  const [amIWinner, setAmIWinner] = useState(false);
+  const [winReason, setWinReason] = useState("");
 
+  // 소켓 + 이벤트 등록 여부
+  const socketRef = useRef(null);
+  const joinedRef = useRef(false);       // joinRoom 실행 여부
+  const isSetupEventRef = useRef(false); // 소켓 이벤트 등록 여부
+
+  // 1) 최초(마운트) 시 소켓 이벤트 등록 (단 한 번만)
   useEffect(() => {
-    // roomId, nickname 없으면 에러
-    if (!roomId || !nickname) {
-      console.warn("roomId or nickname missing:", roomId, nickname);
-      navigate("/m/game");
-      return;
+    if (!socketRef.current) {
+      socketRef.current = getSocket(); // 전역 싱글톤 소켓
     }
+    const socket = socketRef.current;
 
-    // 소켓 joinRoom
-    socket.emit("joinRoom", { roomId, nickname, timeChoice });
+    if (!isSetupEventRef.current) {
+      isSetupEventRef.current = true;
 
-    if (!didSetupSocketRef.current) {
-      didSetupSocketRef.current = true;
-
-      // roomData
+      // 소켓 이벤트 등록
       socket.on("roomData", (data) => {
         if (!data) return;
         setBoard(data.board);
@@ -91,7 +183,12 @@ function OnlineBody(props, ref) {
         setWhiteTime(data.whiteTime);
         setGameStarted(data.gameStarted);
 
-        // 내 돌, 상대 돌
+        // 방 이름 표시
+        if (data.roomName) {
+          setTheRoomName(data.roomName);
+        }
+
+        // 내 돌 / 상대 돌
         const me = data.players.find((p) => p.socketId === socket.id);
         const opp = data.players.find((p) => p.socketId !== socket.id);
         if (me) setMyStone(me.stone);
@@ -101,7 +198,6 @@ function OnlineBody(props, ref) {
         }
       });
 
-      // updateGame
       socket.on("updateGame", (payload) => {
         setBoard(payload.board);
         setCurrentPlayer(payload.currentPlayer);
@@ -113,12 +209,15 @@ function OnlineBody(props, ref) {
         if (payload.winner) {
           const iWin = payload.winner === myStone;
           setAmIWinner(iWin);
-          setWinReason(payload.winner === 1 || payload.winner === 2 ? "5목" : "");
+          setWinReason(
+            payload.winner === 1 || payload.winner === 2
+              ? "5목"
+              : payload.winReason || ""
+          );
           setShowWinModal(true);
         }
       });
 
-      // timeUpdate
       socket.on("timeUpdate", (payload) => {
         setBlackTime(payload.blackTime);
         setWhiteTime(payload.whiteTime);
@@ -126,73 +225,85 @@ function OnlineBody(props, ref) {
           setWinner(payload.winner);
           const iWin = payload.winner === myStone;
           setAmIWinner(iWin);
-          setWinReason("시간");
+          setWinReason(payload.winReason || "시간");
           setShowWinModal(true);
         }
       });
 
-      // chatMessage
       socket.on("chatMessage", ({ sender, text }) => {
         setChatMessages((prev) => [...prev, { sender, text }]);
       });
 
-      // roomFull
       socket.on("roomFull", () => {
-        alert("이미 2명으로 가득 찬 방입니다.");
+        window.alert("이미 2명으로 가득 찬 방입니다.");
         navigate("/m/game");
       });
 
-      // rejectMove
       socket.on("rejectMove", ({ reason }) => {
-        alert("착수 거부: " + reason);
+        window.alert("착수 거부: " + reason);
       });
     }
+  }, [navigate, myStone]);
 
+  // 2) roomId 변경 시 → joinRoom (단 한 번만), 언마운트 시 leaveRoom
+  useEffect(() => {
+    if (!roomId) {
+      navigate("/m/game");
+      return;
+    }
+    const socket = socketRef.current;
+
+    if (!joinedRef.current) {
+      joinedRef.current = true;
+      socket.emit("joinRoom", { roomId, roomName, timeChoice });
+    }
+
+    // 언마운트 시 leaveRoom
     return () => {
-      // cleanup
+      socket.emit("leaveRoom", { roomId });
     };
-  }, [roomId, nickname, timeChoice, navigate]);
+  }, [roomId, roomName, timeChoice, navigate]);
 
   // 오목판 클릭
   function handleCellClick(r, c) {
     if (!gameStarted || winner) return;
     if (myStone !== currentPlayer) return;
-    socket.emit("placeStone", { roomId, row: r, col: c });
+    socketRef.current.emit("placeStone", { roomId, row: r, col: c });
   }
 
-  // 채팅
+  // 채팅 전송
   function handleSendChat() {
     if (!chatInput.trim()) return;
-    socket.emit("chatMessage", { roomId, msg: chatInput.trim() });
+    socketRef.current.emit("chatMessage", { roomId, msg: chatInput.trim() });
     setChatInput("");
     setEmojiPanelOpen(false);
   }
   function handleSelectEmoji(emo) {
-    socket.emit("chatMessage", { roomId, msg: chatInput + emo });
+    socketRef.current.emit("chatMessage", { roomId, msg: chatInput + emo });
     setChatInput("");
     setEmojiPanelOpen(false);
   }
 
-  // 승리 모달 X => /m/game
+  // 승리 모달 닫기 => /m/game 페이지로
   function handleCloseModal() {
     setShowWinModal(false);
     navigate("/m/game");
   }
 
-  // 재대국 => 새로고침
+  // 재대국 => 페이지 새로고침
   function handleRematch() {
     window.location.reload();
   }
 
-  // 흑/백 표시 active
+  // 현재 턴 표시 (흑 or 백)
   const blackActive = !winner && currentPlayer === 1;
   const whiteActive = !winner && currentPlayer === 2;
 
   return (
     <div className="bg-[#3A3A3A] text-white min-h-screen overflow-auto flex flex-col lg:flex-row pb-14">
-      {/* 메인(보드+프로필) */}
+      {/* 메인 영역 (보드+프로필) */}
       <div className="flex-1 flex flex-col items-center">
-        {/* 상대 플레이어 */}
+        {/* 상대 플레이어 영역 */}
         <div className="w-full max-w-4xl mt-4 px-4 flex items-center justify-center">
           <div className="flex items-center space-x-2">
             <img
@@ -205,6 +316,7 @@ function OnlineBody(props, ref) {
               {oppStone === 1 ? "(흑)" : oppStone === 2 ? "(백)" : ""}
             </span>
           </div>
+          {/* 상대 시간 */}
           <div
             className={`
               ml-auto text-sm px-2 py-1 rounded
@@ -227,7 +339,11 @@ function OnlineBody(props, ref) {
 
         {/* 오목판 */}
         <div className="w-full max-w-4xl mt-2 px-4 flex justify-center">
-          <Goban board={board} lastMove={lastMove} onCellClick={handleCellClick} />
+          <Goban
+            board={board}
+            lastMove={lastMove}
+            onCellClick={handleCellClick}
+          />
         </div>
 
         {/* 내 프로필 */}
@@ -239,9 +355,11 @@ function OnlineBody(props, ref) {
               className="w-10 h-10 border border-gray-300 object-cover"
             />
             <span className="text-base font-bold">
-              {nickname} {myStone === 1 ? "(흑)" : myStone === 2 ? "(백)" : ""}
+              {theRoomName ? `[${theRoomName}]` : "내 방?"}{" "}
+              {myStone === 1 ? "(흑)" : myStone === 2 ? "(백)" : ""}
             </span>
           </div>
+          {/* 내 시간 */}
           <div
             className={`
               ml-auto text-sm px-2 py-1 rounded
@@ -263,12 +381,13 @@ function OnlineBody(props, ref) {
         </div>
       </div>
 
-      {/* 우측(대국 기록 + 채팅) [큰 화면 전용] */}
+      {/* 우측(대국 기록 + 채팅) [PC 화면 전용] */}
       <div className="hidden lg:flex flex-col w-72 bg-[#2B2B2B] p-2">
         <div className="bg-[#3A3A3A] rounded p-2 overflow-y-auto h-40 mb-2">
           <h3 className="text-sm font-bold mb-2">대국 기록</h3>
           <div className="text-xs text-gray-300">로그 표시..</div>
         </div>
+        {/* 채팅 영역 */}
         <div
           className="bg-[#3A3A3A] rounded p-2 flex flex-col h-64 cursor-pointer"
           onClick={() => chatInputRef.current?.focus()}
@@ -395,7 +514,6 @@ function OnlineBody(props, ref) {
             <div className="text-sm text-gray-300 mb-3">
               {winReason || "승리"}
             </div>
-            {/* ... 임의 지표 UI ... */}
 
             <button className="w-full bg-green-600 hover:bg-green-700 py-2 rounded font-bold mb-2">
               게임 리뷰
@@ -419,102 +537,3 @@ function OnlineBody(props, ref) {
 }
 
 export default forwardRef(OnlineBody);
-
-/** Goban(오목판) */
-function Goban({ board, lastMove, onCellClick }) {
-  const [boardSizePx, setBoardSizePx] = useState(600);
-
-  useEffect(() => {
-    function handleResize() {
-      const w = window.innerWidth;
-      const newSize = w < 640 ? w - 24 : 600;
-      setBoardSizePx(newSize > 200 ? newSize : 200);
-    }
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const size = 15;
-  const cellGap = boardSizePx / (size - 1);
-
-  return (
-    <div
-      className="relative"
-      style={{
-        width: boardSizePx + "px",
-        height: boardSizePx + "px",
-        backgroundColor: "#DAB86F",
-      }}
-    >
-      {/* 격자선 */}
-      {Array.from({ length: size }, (_, i) => (
-        <div key={i}>
-          <div
-            className="absolute"
-            style={{
-              top: i * cellGap,
-              left: 0,
-              width: boardSizePx,
-              height: "2px",
-              backgroundColor: "#5A3A1B",
-            }}
-          />
-          <div
-            className="absolute"
-            style={{
-              left: i * cellGap,
-              top: 0,
-              width: "2px",
-              height: boardSizePx,
-              backgroundColor: "#5A3A1B",
-            }}
-          />
-        </div>
-      ))}
-      {/* 돌 표시 */}
-      {board.map((rowArr, r) =>
-        rowArr.map((val, c) => {
-          if (val === 0) return null;
-          const isLast = lastMove && lastMove.row === r && lastMove.col === c;
-          return (
-            <div
-              key={`${r}-${c}`}
-              className={`
-                absolute
-                ${val === 1 ? "bg-black" : "bg-white"}
-                rounded-full
-                border
-                ${val === 2 ? "border-gray-500" : "border-black"}
-                ${isLast ? "outline outline-2 outline-yellow-300" : ""}
-              `}
-              style={{
-                width: cellGap * 0.65,
-                height: cellGap * 0.65,
-                top: r * cellGap - (cellGap * 0.65) / 2,
-                left: c * cellGap - (cellGap * 0.65) / 2,
-              }}
-            />
-          );
-        })
-      )}
-
-      {/* 클릭 영역 */}
-      {Array.from({ length: size }, (_, r) =>
-        Array.from({ length: size }, (_, c) => (
-          <div
-            key={`pos-${r}-${c}`}
-            onClick={() => onCellClick(r, c)}
-            className="absolute"
-            style={{
-              width: cellGap,
-              height: cellGap,
-              top: r * cellGap - cellGap / 2,
-              left: c * cellGap - cellGap / 2,
-            }}
-          />
-        ))
-      )}
-    </div>
-  );
-}

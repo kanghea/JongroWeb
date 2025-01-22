@@ -1,0 +1,12 @@
+/* 예시: Tailwind 없이, 직접 CSS 클래스로 15x15 격자 배경을 만듦 */
+.gomoku-board {
+    background-color: #DAB86F;
+    background-image:
+      linear-gradient(to right, #5A3A1B 1px, transparent 1px),
+      linear-gradient(to bottom, #5A3A1B 1px, transparent 1px);
+    /* (100% / 15)씩 반복하여 15줄 */
+    background-size: calc(100% / 15) calc(100% / 15);
+    position: relative;
+    /* ... */
+  }
+  

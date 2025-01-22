@@ -9,7 +9,7 @@ import React, {
   useCallback,
   useRef
 } from "react";
-import { useNavigate } from "react-router-dom"; // ★ 추가
+import { useNavigate } from "react-router-dom"; // ★ 기존코드에 이미 추가됨
 import player1Image from "../images/player1.png";
 import player2Image from "../images/player2.png";
 import { getAiMove } from "../engines/omokEngine";
@@ -17,7 +17,9 @@ import { getAiMove } from "../engines/omokEngine";
 const BOARD_SIZE = 15;
 
 function Body({ onUndoRef, onRedoRef, onNewRef, onHintRef, onGiveUpRef }, ref) {
-  // 기존 상태들...
+  // --------------------------------
+  // 1) 기존 상태들 (절대 수정 금지)
+  // --------------------------------
   const [history, setHistory] = useState([
     {
       board: createEmptyBoard(),
@@ -36,8 +38,8 @@ function Body({ onUndoRef, onRedoRef, onNewRef, onHintRef, onGiveUpRef }, ref) {
   const [selectedTime, setSelectedTime] = useState("1분");
   const [timePanelOpen, setTimePanelOpen] = useState(false);
 
-  // 닉네임(사용자 입력)
-  const [nickname, setNickname] = useState("LocalUser");
+  // "방 이름" 입력받기
+  const [roomName, setRoomName] = useState("LocalRoom");
 
   // 타이머 (로컬 테스트용)
   const [blackTime, setBlackTime] = useState(60);
@@ -64,11 +66,27 @@ function Body({ onUndoRef, onRedoRef, onNewRef, onHintRef, onGiveUpRef }, ref) {
 
   const chatInputRef = useRef(null);
 
-  // ★ react-router-dom
+  // react-router-dom
   const navigate = useNavigate();
 
-  // 시간 변경 => 로컬 타이머 세팅
+  // --------------------------------
+  // 2) StrictMode 중복 실행 방지 ref (절대 수정 금지)
+  // --------------------------------
+  const didMountRef = useRef(false);
+
+  // --------------------------------
+  // 3) useEffect 예시: 시간 설정 (절대 수정 금지)
+  // --------------------------------
   useEffect(() => {
+    if (!didMountRef.current) {
+      // 첫 마운트
+      didMountRef.current = true;
+      console.log("Body component mounted (first time)");
+    } else {
+      console.log("Body component re-mounted (StrictMode check)");
+    }
+
+    // gameStarted가 false일 때만 시간을 초기화
     if (!gameStarted) {
       const sec = parseTimeToSeconds(selectedTime);
       setBlackTime(sec);
@@ -76,7 +94,9 @@ function Body({ onUndoRef, onRedoRef, onNewRef, onHintRef, onGiveUpRef }, ref) {
     }
   }, [selectedTime, gameStarted]);
 
-  // (로컬 테스트) 타이머 useEffect
+  // --------------------------------
+  // 4) 로컬 테스트 타이머 (절대 수정 금지)
+  // --------------------------------
   useEffect(() => {
     if (!actualTimerRunning || winner) return;
     const interval = setInterval(() => {
@@ -112,26 +132,26 @@ function Body({ onUndoRef, onRedoRef, onNewRef, onHintRef, onGiveUpRef }, ref) {
     setWinReason("시간으로");
   }
 
-  // ---------------------------
-  // (중요 수정) handlePlay => /m/game/:roomId
-  // ---------------------------
+  // --------------------------------
+  // 5) 방 만들기 -> /m/game/:roomId?timeChoice=...&roomName=...
+  // --------------------------------
   function handlePlay() {
     // 1) 고유 방 ID 생성
     const roomId = "room_" + Date.now(); // or any random/uuid
 
     // 2) 이동할 URL
-    // 예) /m/game/room_1689999999?timeChoice=3분&nickname=홍길동
-    const url = `/m/game/${roomId}?timeChoice=${selectedTime}&nickname=${encodeURIComponent(
-      nickname
+    // 예) /m/game/room_1689999999?timeChoice=3분&roomName=테스트방
+    const url = `/m/game/${roomId}?timeChoice=${selectedTime}&roomName=${encodeURIComponent(
+      roomName
     )}`;
 
     // 3) 라우터 이동
     navigate(url);
   }
 
-  // ---------------------------
-  // 기존 로직(Undo/Redo/New/Hint/GiveUp)...
-  // ---------------------------
+  // --------------------------------
+  // 6) 기타 로직(Undo/Redo/New/Hint/GiveUp)... (절대 수정 금지)
+  // --------------------------------
   const handleCellClick = (r, c) => {
     // 로컬 테스트용
   };
@@ -141,23 +161,58 @@ function Body({ onUndoRef, onRedoRef, onNewRef, onHintRef, onGiveUpRef }, ref) {
   const handleHint = useCallback(() => {}, []);
   const handleGiveUp = useCallback(() => {}, []);
 
-  // ... onEffect for onUndoRef, onRedoRef, etc. ...
+  // --------------------------------
+  // (추가) 가로로 가득 찬 오목판: 돌 클릭 불가
+  // --------------------------------
+  function FullWidthGoban() {
+    // 단순히 15x15 선만 그려주는 예시
+    // (onClick 이벤트 없이 돌을 놓을 수 없게 처리)
+    return (
+      <div className="relative w-full aspect-square bg-[#DAB86F]">
+        {/* 수평, 수직 줄 15개씩 */}
+        {Array.from({ length: BOARD_SIZE }, (_, i) => (
+          <React.Fragment key={i}>
+            {/* 가로줄 */}
+            <div
+              className="absolute left-0 right-0 h-[2px] bg-[#5A3A1B]"
+              style={{
+                top: `${(100 / (BOARD_SIZE - 1)) * i}%`
+              }}
+            />
+            {/* 세로줄 */}
+            <div
+              className="absolute top-0 bottom-0 w-[2px] bg-[#5A3A1B]"
+              style={{
+                left: `${(100 / (BOARD_SIZE - 1)) * i}%`
+              }}
+            />
+          </React.Fragment>
+        ))}
+      </div>
+    );
+  }
 
-  // ---------------------------
-  // 렌더
-  // ---------------------------
+  // --------------------------------
+  // 7) 렌더
+  // --------------------------------
   return (
     <div className="bg-[#3A3A3A] text-white min-h-screen">
       <div className="max-w-md mx-auto p-4">
+        
+        {/* (추가) 방 이름 위쪽에 새 오목판을 가득 넣어보기 */}
+        <div className="mb-4">
+          <FullWidthGoban />
+        </div>
+
         <h1 className="text-2xl font-bold mb-4">오목 세팅 (로컬 테스트/준비)</h1>
 
-        {/* 닉네임 입력 */}
+        {/* 방 이름 입력 */}
         <div className="mb-3">
-          <label className="block text-sm text-gray-300 mb-1">닉네임</label>
+          <label className="block text-sm text-gray-300 mb-1">방 이름</label>
           <input
             type="text"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
+            value={roomName}
+            onChange={(e) => setRoomName(e.target.value)}
             className="w-full px-2 py-1 rounded bg-gray-700 text-white"
           />
         </div>
@@ -199,10 +254,10 @@ function Body({ onUndoRef, onRedoRef, onNewRef, onHintRef, onGiveUpRef }, ref) {
           onClick={handlePlay}
           className="mt-4 w-full py-3 text-lg font-bold rounded bg-green-500 hover:bg-green-600"
         >
-          온라인 게임 시작
+          방 만들기 (온라인)
         </button>
 
-        {/* 아래는 로컬 테스트용(생략 가능)... */}
+        {/* 아래는 로컬 테스트용 UI 등... (생략 가능) */}
       </div>
     </div>
   );
@@ -210,7 +265,7 @@ function Body({ onUndoRef, onRedoRef, onNewRef, onHintRef, onGiveUpRef }, ref) {
 
 export default forwardRef(Body);
 
-/** 보조 함수 */
+/** (기존) 보조 함수들 - 수정 금지 */
 function parseTimeToSeconds(mode) {
   if (!mode) return 60;
   const n = parseInt(mode.replace("분", ""), 10);
@@ -220,4 +275,3 @@ function parseTimeToSeconds(mode) {
 function createEmptyBoard() {
   return Array.from({ length: BOARD_SIZE }, () => Array(BOARD_SIZE).fill(0));
 }
-// etc. ...
